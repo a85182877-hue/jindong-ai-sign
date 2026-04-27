@@ -92,6 +92,7 @@
 
         <div class="flex flex-col gap-4 flex-1 justify-center z-10">
             
+            <!-- 選項 A: 總院 -->
             <div class="border-4 border-charcoal bg-white rounded-2xl p-4 relative shadow-sm">
                 <div class="absolute -top-4 left-6 bg-charcoal text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     隨時可預約
@@ -120,6 +121,7 @@
                 </div>
             </div>
 
+            <!-- 選項 B: 慈航寺 -->
             <div class="border-4 border-warm-orange bg-[#FFF8F3] rounded-2xl p-4 relative shadow-sm">
                 <div class="absolute -top-4 left-6 bg-warm-orange text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     週末來保養
@@ -157,6 +159,7 @@
             </button>
         </div>
 
+        <!-- AI 評估視窗 -->
         <div id="ai-modal" class="absolute inset-0 bg-[#F8F7F3] z-50 flex flex-col p-8 pointer-events-none">
             
             <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4 mb-4">
@@ -284,7 +287,8 @@
                         <p class="mt-3 text-gray-600 font-bold text-sm">正在結合您的職業與人體力學進行深度分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium">
-                        </div>
+                        <!-- AI 內容 -->
+                    </div>
                 </div>
 
             </div>
@@ -293,7 +297,7 @@
     </div>
 
     <script>
-        // 設定 Gemini API Key
+        // 設定 Gemini API Key (已填入您的金鑰)
         const apiKey = "AIzaSyCr1tTrjyUZDffsYCHpSgAvqmtZvXYMNnk"; 
 
         function openAIModal() {
@@ -309,7 +313,6 @@
         }
 
         async function analyzeSymptoms() {
-            // 蒐集表單資料
             const occupation = document.getElementById('user-occupation').value;
             if (!occupation) return alert('請先選擇您的職業/生活型態哦！');
 
@@ -326,7 +329,6 @@
             const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
             const extraInfo = document.getElementById('user-extra').value.trim() || '無';
 
-            // 組裝給 AI 的客戶資訊
             const clientInfo = `
                 客戶資訊：
                 - 職業/型態：${occupation}
@@ -337,12 +339,10 @@
                 - 補充說明：${extraInfo}
             `;
 
-            // UI 狀態切換
             document.getElementById('result-container').classList.remove('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
             document.getElementById('ai-response').classList.add('hidden');
             
-            // 滾動到結果區塊
             setTimeout(() => {
                 const modalBody = document.querySelector('.overflow-y-auto');
                 modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
@@ -367,22 +367,22 @@
                 - 分析語氣切勿武斷：多使用「有可能是」、「通常容易」、「可能會讓...」等推測語氣。
 
                 你的回答必須包含以下結構：
-                1. 絕對拒絕與保護機制（最高優先級）：若客戶的特殊狀況包含「懷孕中」或「近期骨折/急性發炎」，請直接依據下方對應的文案溫婉回覆，並**結束對話**（不需做後續任何的力學分析、品牌宣導或預約引導）：
+                1. 絕對拒絕與保護機制（最高優先級）：若客戶的特殊狀況包含「懷孕中」或「近期骨折/急性發炎」，請直接依據下方對應的文案溫婉回覆，並結束對話：
                    - 若為「懷孕中」：「留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。等未來順產後，隨時歡迎您再來找我們好好保養身體喔！」
                    - 若為「近期骨折/急性發炎」：「留意到您目前正處於近期骨折或急性發炎的狀態，身體正在經歷辛苦的修復期！為了您的絕對安全與避免造成二度傷害，我們團隊強烈建議您目前先以醫療院所的診治與充分休息為主，此階段暫時不適合進行整復推拿調理。等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！」
                 2. 痛點與職業共鳴：安撫不適，點出該職業姿勢是如何改變全身的肌肉張力。
                 3. 精準破題與深度分析（重要）：請務必以「從**人體力學**的角度來看，」這句話作為分析開頭。接著，【套用上述合規的知識庫邏輯】，具體點出是哪條肌肉因為職業姿勢緊繃，進而代償拉扯到客戶不舒服的地方。語氣溫暖不武斷。
-                4. 品牌理念與特色宣導（一字不漏使用）：
+                4. 品牌理念與特色宣導：
                    「我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。」
-                5. 病理/醫生診斷轉譯（若有提到醫生說法或病理名詞，一字不漏使用）：
+                5. 病理/醫生診斷轉譯：
                    「**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。」
-                6. 特殊狀況安全提醒（若有其他非懷孕且非骨折發炎的特殊狀況，獨立使用，不穿插分析）：
+                6. 特殊狀況安全提醒：
                    「留意到您有ＸＸＸＸ的特殊身體狀況，為了您的安全，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！」
-                7. 結尾強制金句與預約（一字不漏，若啟動了拒絕保護機制則免加）：
+                7. 結尾強制金句與預約：
                    「以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\\n您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\\n👉 官方預約連結：https://lin.ee/vkwcVbs」
                 
                 【嚴格排版要求：橘色標記限制】
-                為了符合法規與品牌視覺，**只允許在以下五個特定詞句加上雙星號（**）變成粗體**，其他任何字句都**絕對不允許加粗體**：
+                為了符合法規與品牌視覺，只允許在以下五個特定詞句加上雙星號變成粗體，其他任何字句都絕對不允許加粗體：
                 1. **我們不針對疾病做治療**
                 2. **非結構性破壞**
                 3. **幫身體找回原本自在的空間與平衡**
@@ -392,18 +392,13 @@
 
             try {
                 const response = await callGeminiWithRetry(clientInfo, systemPrompt);
-                
-                // 簡易 Markdown 轉換 (粗體轉成 HTML strong 標籤)
                 let formattedResponse = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                
-                // 將 LINE 網址轉換為可點擊的連結
-                formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold hover:text-blue-800">$1</a>');
+                formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
                 
                 document.getElementById('ai-response').innerHTML = formattedResponse;
                 document.getElementById('loading-state').classList.add('hidden');
                 document.getElementById('ai-response').classList.remove('hidden');
                 
-                // 再次滾動以確保看完完整結果
                 setTimeout(() => {
                     const modalBody = document.querySelector('.overflow-y-auto');
                     modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
@@ -416,11 +411,10 @@
             }
         }
 
-        // 帶有指數退避機制的 Gemini API 呼叫函數
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
-            // 💡 【除錯關鍵】修改為最穩定、通用的模型名稱：gemini-1.5-flash
+            // 🚀 【終極修正點】切換至正式穩定版 v1 通道
             const safeApiKey = apiKey.trim();
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -436,7 +430,6 @@
                     });
 
                     if (!response.ok) {
-                        // 💡 加入錯誤捕捉雷達，把 Google 官方的錯誤原因印在 F12 控制台
                         const errorText = await response.text();
                         console.error(`Google API 錯誤 (${response.status}):`, errorText);
                         throw new Error(`HTTP error! status: ${response.status}`);
