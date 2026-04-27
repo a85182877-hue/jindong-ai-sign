@@ -25,7 +25,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             display: flex;
             flex-direction: column;
-            /* 縮小上下左右的內留白，讓出空間給 AI 按鈕 */
             padding: 2.5rem 3.5rem; 
             position: relative;
             overflow: hidden;
@@ -37,7 +36,6 @@
         .bg-charcoal { background-color: #333333; }
         .bg-warm-orange { background-color: #E06A3B; }
 
-        /* AI Modal 樣式 */
         #ai-modal {
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
             transform: translateY(100%);
@@ -53,7 +51,6 @@
             border-top: 3px solid #E06A3B;
             width: 20px;
             height: 20px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
             animation: spin 1s linear infinite;
             display: inline-block;
             vertical-align: middle;
@@ -65,8 +62,6 @@
         .ai-response-content strong {
             color: #E06A3B;
         }
-
-        /* 隱藏原生 checkbox 以自訂樣式 */
         .chip-checkbox input:checked + div {
             background-color: #E06A3B;
             color: white;
@@ -160,8 +155,8 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <!-- 版本檢查標記 -->
-            <p class="text-[10px] text-gray-400 mt-2">Ver. 1.0.2 (終極相容版)</p>
+            <!-- 版本檢查標記：幫助確認 GitHub Pages 是否已經更新 -->
+            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.4 - 深度專業版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -176,7 +171,6 @@
 
             <div class="flex-1 flex flex-col gap-4 overflow-y-auto pb-4 pr-2">
                 
-                <!-- 表單填寫區 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
                     
                     <div class="mb-4">
@@ -286,16 +280,13 @@
                     </button>
                 </div>
 
-                <!-- 結果顯示區 -->
                 <div id="result-container" class="hidden bg-[#FFF8F3] p-5 mt-2 rounded-2xl border-2 border-warm-orange shadow-sm relative">
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
                         <div class="loader"></div>
                         <p class="mt-3 text-gray-600 font-bold text-sm">正在結合您的職業與人體力學進行深度分析...</p>
                     </div>
-                    <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium">
-                        <!-- AI 回覆內容 -->
-                    </div>
+                    <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium"></div>
                 </div>
 
             </div>
@@ -356,42 +347,23 @@
             }, 100);
 
             const systemPrompt = `
-                你是一位來自「筋動人生」傳統整復推拿的資深師傅，擅長「人體力學」與「結構力學」分析。
-                使用者會提供他們的職業型態、不適部位與就醫/特殊狀況。
-                請以溫暖、專業、平易近人的口吻（繁體中文）回答，字數控制在 400 字以內。
-                
-                【專業人體力學知識庫】
-                - 【腰臀】：久坐易讓前側「髂腰肌」緊縮，與後側腹肌、腰胸筋膜形成「前後拔河」擠壓腰椎空間；若深層「梨狀肌」失去彈性，通常容易擠壓到周圍空間，影響循環而產生麻感。外圍臀肌若失去支撐力，身體就會強迫往上抓取「腰部」的肌肉來代償。
-                - 【上背/肩頸/頭部】：長期駝背前傾，會讓連接手臂與骨盆的巨大牽引繩索「闊背肌」縮短繃緊，間接引發膏肓處緊繃；而前側胸部肌肉若長期縮短，可能會往下拉扯頸椎與肩膀。
-                - 【腿部/膝蓋/足底】：骨盆若失衡，會讓大腿的四大肌肉鋼索對膝蓋產生「前後夾擊、左右拉扯」，導致膝蓋空間被壓縮而感到卡卡的；失衡力量若往下重擊，會逼著小腿避震系統（腓腸肌）緊縮，拉扯足底筋膜。
+你是一位來自「筋動人生」傳統整復推拿的資深師傅，擅長「人體力學」與「結構力學」分析。
+請根據客戶提供的資訊進行深度專業評估。
 
-                【絕對合規紅線與用語規範】
-                - 絕對不能有任何醫療宣稱、診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎等）。
-                - 絕對禁止使用「神經」、「壓迫神經」或「神經通道」等字眼！若需解釋麻感，請一律用「擠壓周圍空間，影響循環產生痠麻感」來替代。
-                - 提及骨骼或痠痛問題時，必須客觀視為空間被擠壓的「物理現象與力學代償結果」。
-                - 針對解方，一律使用「拉伸」、「伸展」、「放鬆肌肉與筋膜」、「找回身體空間」等溫和字眼。
-                - 絕對不要直接使用「動力鏈」，請改用「人體力學」的角度去解釋。
-                - 分析語氣切勿武斷：多使用「有可能是」、「通常容易」、「可能會讓...」等推測語氣。
+【專業人體力學知識庫】
+- 【下肢與膝蓋】：膝蓋無力通常是因「前側、後側、內側、外側」四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌緊繃會像絞盤一樣拉扯足底筋膜，是足底筋膜炎主因。
+- 【腰背與脊椎】：久坐使前側「髂腰肌」縮短，與後側肌肉「前後拔河」擠壓腰椎空間導致椎間盤突出。駝背會縮短「闊背肌」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
+- 【臀肌與骨盆】：骨盆是承上啟下的橋樑。深層「梨狀肌」失去彈性會擠壓周圍空間影響循環產生麻感。臀中、臀小肌無力會導致地基不穩，逼迫腰部代償引發慢性腰痛。
 
-                你的回答必須包含以下結構：
-                1. 絕對拒絕與保護機制（最高優先級）：若客戶的特殊狀況包含「懷孕中」或「近期骨折/急性發炎」，請直接依據文案溫婉回覆並結束對話。
-                2. 痛點與職業共鳴：安撫不適，點出該職業姿勢是如何改變全身的肌肉張力。
-                3. 精準破題與深度分析（重要）：請務必以「從**人體力學**的角度來看，」這句話作為分析開頭。具體點出肌肉失衡的邏輯。
-                4. 品牌理念與特色宣導（一字不漏使用）：
-                   「我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。」
-                5. 病理/醫生診斷轉譯：
-                   「**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。」
-                6. 特殊狀況安全提醒：如勾選鋼釘等其他狀況，請獨立提醒並告知來現場要跟師傅說。
-                7. 結尾強制金句與預約：
-                   「以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\\n您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\\n👉 官方預約連結：https://lin.ee/vkwcVbs」
-                
-                【嚴格排版要求：橘色標記限制】
-                只允許在以下五個特定詞句加上雙星號標記為粗體，其餘文字嚴禁加粗體：
-                1. **我們不針對疾病做治療**
-                2. **非結構性破壞**
-                3. **幫身體找回原本自在的空間與平衡**
-                4. **人體力學**
-                5. **先放鬆肌肉再達成平衡舒緩**
+【絕對規範】
+- 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
+- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
+- 語氣：從**人體力學**的角度破題，分析具備深度但溫暖不武斷。
+
+你的回答必須包含以下固定段落：
+1. 品牌理念：我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念...
+2. 法規防護：**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題...
+3. 預約引導：官方預約連結 https://lin.ee/vkwcVbs
             `;
 
             try {
@@ -410,22 +382,20 @@
 
             } catch (error) {
                 document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('ai-response').innerHTML = '<span class="text-red-500 font-bold">抱歉，AI 師傅目前稍忙中，請直接在官方 LINE 上留言詢問我們！</span>';
+                document.getElementById('ai-response').innerHTML = '<span class="text-red-500 font-bold">抱歉，AI 伺服器目前忙碌中，請稍後在官方 LINE 上直接留言詢問我們！</span>';
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
-            // 💡 修正點：使用 v1 穩定版網址，並將金鑰修剪空白
             const safeApiKey = apiKey.trim();
+            // 💡 修正關鍵：固定使用 v1 穩定通道網址，不帶 beta 字樣
             const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
-            // 🚀 關鍵核心：將指令合併到 contents 中，徹底避開 API 欄位不認得的問題
-            const combinedText = `[請嚴格執行以下系統指令]\n${systemInstruction}\n\n[待分析客戶資料如下]\n${prompt}`;
-
+            // 🚀 關鍵核心：將指令與資料徹底合併傳送，徹底避開 v1 不支援 systemInstruction 欄位的問題
             const payload = {
                 contents: [{
-                    parts: [{ text: combinedText }]
+                    parts: [{ text: `[系統指令]\n${systemInstruction}\n\n[待評估資料]\n${prompt}` }]
                 }]
             };
 
@@ -439,7 +409,7 @@
 
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error(`Google API 失敗回報 (${response.status}):`, errorText);
+                        console.error(`API 錯誤詳情 (${response.status}):`, errorText);
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
