@@ -75,7 +75,7 @@
         
         <!-- 第一區：溫暖問候與共鳴 -->
         <div class="text-center mb-4 pt-1">
-            <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生脊椎保健 Logo" class="w-full max-w-[320px] mx-auto mb-4">
+            <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生脊椎保健 Logo" class="w-full max-w-[320px] mx-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/320x100/F8F7F3/333?text=Logo';">
             
             <h2 class="text-[26px] font-black text-gray-700 mb-4 tracking-wide leading-snug">
                 平日忙於生活<br>別忘了留點空間給身體
@@ -155,8 +155,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <!-- 版本號標記，若您沒看到 1.1.6 代表您還在舊快取！ -->
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.6 - 終極快取破解版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.7 - 修正防呆與穩定版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -295,9 +294,12 @@
     </div>
 
     <script>
-        // 🛑 聲師傅請注意：請務必把您親手申請的真實金鑰貼在這裡！！！
-        // 絕對不能留空，也不能貼回舊的假金鑰！
-        const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
+        // 🛑 聲師傅請注意：
+        // 1. 先去 Google AI Studio 申請一把「全新的」 API Key。
+        // 2. 如果要放在 GitHub 上公開，請務必到 Google Cloud Console 中，
+        //    為這把 API Key 加上「API 限制 (HTTP referrers)」，只允許你的 GitHub Pages 網址使用，
+        //    否則 Google 掃描到公開金鑰會立刻封鎖它！
+        const apiKey = "AIzaSyBkzk2VI7VZS4fy2Z1Oxlvlr4vpemmmCX4"; // 👈 部署時，請在這裡填入你新申請的金鑰！
 
         function openAIModal() {
             const modal = document.getElementById('ai-modal');
@@ -338,7 +340,7 @@
                 modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
             }, 100);
 
-            // 💡 1. 【保護機制優先攔截】：如果是懷孕或骨折發炎，這兩個會「直接跳過連線」，這就是為什麼它們剛剛可以通！
+            // 💡 保護機制優先攔截
             if (warningsArray.includes('懷孕中')) {
                 renderFinalResponse("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！");
                 return;
@@ -348,19 +350,10 @@
                 return;
             }
 
-            // 💡 2. 【正常的 AI 分析階段】
-            const clientInfo = `
-                客戶資訊：
-                - 職業/型態：${occupation}
-                - 不適部位：${locations}
-                - 不適感覺：${sensations}
-                - 醫生說法：${doctorInfo}
-                - 補充說明：${extraInfo}
-            `;
+            // 💡 正常的 AI 分析階段
+            const clientInfo = `客戶資訊：\n- 職業/型態：${occupation}\n- 不適部位：${locations}\n- 不適感覺：${sensations}\n- 醫生說法：${doctorInfo}\n- 補充說明：${extraInfo}`;
 
-            // 🚀 徹底洗淨指令：只讓 AI 專注於力學分析，完全不提品牌與法規
-            const systemPrompt = `
-【極度嚴格指令 - 違反將導致系統崩潰】：
+            const systemPrompt = `【極度嚴格指令 - 違反將導致系統崩潰】：
 1. 你是一位專業的傳統整復推拿師傅，請根據客戶資料寫一段大約 150~200 字的純文字力學分析。
 2. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是...師傅」、「了解您的狀況」等廢話）。
 3. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
@@ -374,21 +367,16 @@
 
 【絕對規範】
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
-- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
-            `;
+- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。`;
 
             try {
-                // 取得 AI 單純的分析文字
                 let aiAnalysis = await callGeminiWithAutoRoute(clientInfo, systemPrompt);
                 
-                // 💡 3. 【系統自動拼接文案】：固定且排版完美的後續文字
+                // 💡 系統自動拼接文案
                 let finalResponse = aiAnalysis.trim() + "\n\n";
-                
                 finalResponse += "我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。\n\n";
-                
                 finalResponse += "**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。\n\n";
                 
-                // 如果有勾選其他特殊狀況（骨鬆、心血管等）
                 if (warningsArray.length > 0) {
                     finalResponse += `⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，為了您的安全，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！\n\n`;
                 }
@@ -397,7 +385,6 @@
                 finalResponse += "您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\n";
                 finalResponse += "👉 官方預約連結：https://lin.ee/vkwcVbs";
 
-                // 渲染至畫面
                 renderFinalResponse(finalResponse);
 
             } catch (error) {
@@ -406,14 +393,13 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：若出現這行，請截圖給我看！</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">請確認您的 API Key 是否正確且未被停用。</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
-        // 將組合好的文字轉換為 HTML 並顯示
         function renderFinalResponse(text) {
             let formattedResponse = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
@@ -428,37 +414,25 @@
             }, 100);
         }
 
+        // 更新為標準的 API 呼叫格式，並加入重試機制
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
-            // 防呆機制：檢查是否不小心用了我之前亂打的假金鑰
-            if (apiKey.includes("XYMNnk") || apiKey.includes("EXXtI")) {
-                throw new Error("⚠️ 聲師傅，您不小心用到我之前隨手打的「假金鑰」了！請在程式碼裡換成您真實的金鑰！");
+            // 在此預覽平台會自動注入，若您要部署請在上方 const apiKey 填寫
+            const activeKey = apiKey || (typeof window !== 'undefined' && window.__GEMINI_API_KEY__ ? window.__GEMINI_API_KEY__ : "");
+            
+            if (!activeKey) {
+                throw new Error("API Key 為空！請在程式碼中填入您申請的金鑰。");
             }
 
-            const isPreviewEnvironment = (!apiKey || apiKey.trim() === "");
-            if (!isPreviewEnvironment && apiKey.trim().length < 20) {
-                 throw new Error("⚠️ 您填寫的 API Key 看起來太短了，請確認是否有複製完整。");
-            }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${activeKey}`;
             
-            const keyParam = isPreviewEnvironment ? "" : `?key=${apiKey.trim()}`;
-            
-            // 使用最普遍支援的模型與通道
-            const endpointsToTry = [
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent${keyParam}`,
-                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent${keyParam}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent${keyParam}`
-            ];
-
-            const combinedText = `${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
-
             const payload = {
-                contents: [{
-                    parts: [{ text: combinedText }]
-                }]
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
             };
 
-            let lastErrorMessage = "";
-
-            for (const url of endpointsToTry) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            
+            for (let attempt = 0; attempt <= 5; attempt++) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
@@ -467,24 +441,21 @@
                     });
 
                     if (!response.ok) {
-                        const errorText = await response.text();
-                        lastErrorMessage = `嘗試 ${url.split('models/')[1].split(':')[0]} 失敗: ${errorText}`;
-                        
-                        if (response.status === 400 && errorText.includes("API_KEY_INVALID")) {
-                            throw new Error("API Key 無效！請確認您的金鑰複製正確，且沒有多餘的空白。");
-                        }
-                        continue; 
+                        const errorData = await response.text();
+                        throw new Error(`API 請求失敗 (${response.status}): ${errorData}`);
                     }
 
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
+                    
                 } catch (error) {
-                    lastErrorMessage = error.message;
-                    if (error.message.includes("API Key") || error.message.includes("假金鑰")) throw error;
+                    if (attempt < 5) {
+                        await new Promise(resolve => setTimeout(resolve, delays[attempt]));
+                    } else {
+                        throw error;
+                    }
                 }
             }
-
-            throw new Error(`連線失敗。請確認是否為新專案產生的有效金鑰。最後錯誤: \n${lastErrorMessage}`);
         }
     </script>
 </body>
