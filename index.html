@@ -294,7 +294,7 @@
 
     <script>
         // 設定 Gemini API Key (系統將在執行環境中提供)
-        // ⚠️ 記得補上您的 API Key 喔！
+        // ⚠️ 已經為您填入金鑰，並在下方加上修剪空白與最新模型的防護機制
         const apiKey = "AIzaSyCr1tTrjyUZDffsYCHpSgAvqmtZvXYMNnk"; 
 
         function openAIModal() {
@@ -419,7 +419,9 @@
 
         // 帶有指數退避機制的 Gemini API 呼叫函數
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // 💡 【除錯關鍵】清除金鑰頭尾的隱藏空白，並將模型更新為 latest 版本
+            const safeApiKey = apiKey.trim();
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${safeApiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
