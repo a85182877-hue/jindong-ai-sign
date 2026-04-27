@@ -293,8 +293,7 @@
     </div>
 
     <script>
-        // 設定 Gemini API Key (系統將在執行環境中提供)
-        // ⚠️ 已經為您填入金鑰，並在下方加上修剪空白與最新模型的防護機制
+        // 設定 Gemini API Key
         const apiKey = "AIzaSyCr1tTrjyUZDffsYCHpSgAvqmtZvXYMNnk"; 
 
         function openAIModal() {
@@ -419,9 +418,9 @@
 
         // 帶有指數退避機制的 Gemini API 呼叫函數
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
-            // 💡 【除錯關鍵】清除金鑰頭尾的隱藏空白，並將模型更新為 latest 版本
+            // 💡 【除錯關鍵】修改為最穩定、通用的模型名稱：gemini-1.5-flash
             const safeApiKey = apiKey.trim();
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${safeApiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -437,6 +436,9 @@
                     });
 
                     if (!response.ok) {
+                        // 💡 加入錯誤捕捉雷達，把 Google 官方的錯誤原因印在 F12 控制台
+                        const errorText = await response.text();
+                        console.error(`Google API 錯誤 (${response.status}):`, errorText);
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
