@@ -25,7 +25,8 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             display: flex;
             flex-direction: column;
-            padding: 3rem 4rem;
+            /* 縮小上下左右的內留白，讓出空間給 AI 按鈕 */
+            padding: 2.5rem 3.5rem; 
             position: relative;
             overflow: hidden;
         }
@@ -77,34 +78,28 @@
 
     <div class="a4-canvas">
         
-        <!-- 第一區：溫暖問候與共鳴 (視覺層次調整) -->
-        <div class="text-center mb-6 pt-2">
-            <!-- 品牌字體最大 - 替換為圖片 (筋動人生脊椎保健) -->
-            <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生脊椎保健 Logo" class="w-full max-w-[400px] mx-auto mb-6">
-            <!-- 標語字體次之，並增加上下空間 -->
-            <h2 class="text-[28px] font-black text-gray-700 mb-6 tracking-wide leading-snug">
+        <div class="text-center mb-4 pt-1">
+            <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生脊椎保健 Logo" class="w-full max-w-[320px] mx-auto mb-4">
+            
+            <h2 class="text-[26px] font-black text-gray-700 mb-4 tracking-wide leading-snug">
                 平日忙於生活<br>別忘了留點空間給身體
             </h2>
-            <!-- 狀態文字最小，保留段落感 -->
-            <p class="text-[20px] font-bold text-warm-orange mt-2">
-                平日時段駐點師傅不在現場<br>但您的身體痠痛可以不用等
+            
+            <p class="text-[18px] font-bold text-warm-orange mt-1">
+                目前為平日時段駐點師傅不在現場<br>但您的身體痠痛可以不用等
             </p>
         </div>
 
-        <!-- 第二區：雙向導流選擇 -->
-        <div class="flex flex-col gap-5 flex-1 justify-center mt-2 z-10">
+        <div class="flex flex-col gap-4 flex-1 justify-center z-10">
             
-            <!-- 選項 A: 總院 -->
-            <div class="border-4 border-charcoal bg-white rounded-2xl p-5 relative shadow-sm">
-                <div class="absolute -top-4 left-6 bg-charcoal text-white px-4 py-1 rounded-full font-bold text-md tracking-wider">
+            <div class="border-4 border-charcoal bg-white rounded-2xl p-4 relative shadow-sm">
+                <div class="absolute -top-4 left-6 bg-charcoal text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     隨時可預約
                 </div>
-                <!-- 調整寬度比例，給予文字與圖片更多空間 -->
-                <div class="flex justify-between items-start mt-2">
+                <div class="flex justify-between items-start mt-1">
                     <div class="w-4/5 pr-4">
-                        <h2 class="text-2xl font-black text-charcoal mb-3">台中南屯總院 ｜ 全身調理</h2>
-                        <!-- 字體放大至 text-[17px] 提升閱讀性 -->
-                        <ul class="text-gray-700 font-medium text-[17px] space-y-2 mt-2">
+                        <h2 class="text-xl font-black text-charcoal mb-2">台中南屯總院 ｜ 全身調理</h2>
+                        <ul class="text-gray-700 font-medium text-[16px] space-y-1.5 mt-1">
                             <li class="flex items-start">
                                 <span class="text-charcoal font-bold mr-2 whitespace-nowrap">特色</span> 
                                 <span>尋找代償源頭、深層順開緊繃</span>
@@ -114,29 +109,25 @@
                                 <span>反覆痠痛、想要徹底解決結構失衡的你</span>
                             </li>
                             <li class="flex items-start flex-col mt-2">
-                                <span class="text-charcoal font-bold mb-2">時間</span> 
-                                <!-- 營業時間圖片載入 -->
-                                <!-- 只要將這個 html 檔案與「營業時間.jpg」放在同一個資料夾，圖片就會自動顯示 -->
-                                <img src="營業時間.jpg" alt="" class="w-full max-w-[320px] h-auto rounded-lg border border-gray-200 shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/400x180/F8F7F3/333?text=%E7%87%9F%E6%A5%AD%E6%99%82%E9%96%93';">
+                                <span class="text-charcoal font-bold mb-1">時間</span> 
+                                <img src="營業時間.jpg" alt="營業時間表" class="w-full max-w-[280px] h-auto rounded-lg border border-gray-200 shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/400x180/F8F7F3/333?text=%E7%87%9F%E6%A5%AD%E6%99%82%E9%96%93';">
                             </li>
                         </ul>
                     </div>
                     <div class="w-1/5 text-right">
-                        <p class="text-2xl font-black text-charcoal mt-1">$1800</p>
+                        <p class="text-xl font-black text-charcoal mt-1">$1800</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 選項 B: 慈航寺 -->
-            <div class="border-4 border-warm-orange bg-[#FFF8F3] rounded-2xl p-5 relative shadow-sm">
-                <div class="absolute -top-4 left-6 bg-warm-orange text-white px-4 py-1 rounded-full font-bold text-md tracking-wider">
+            <div class="border-4 border-warm-orange bg-[#FFF8F3] rounded-2xl p-4 relative shadow-sm">
+                <div class="absolute -top-4 left-6 bg-warm-orange text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     週末來保養
                 </div>
-                <div class="flex justify-between items-start mt-2">
+                <div class="flex justify-between items-start mt-1">
                     <div class="w-4/5 pr-4">
-                        <h2 class="text-2xl font-black text-warm-orange mb-3">慈雲慈航寺週末駐點 ｜ 重點區域調理</h2>
-                        <!-- 字體放大至 text-[17px] 提升閱讀性 -->
-                        <ul class="text-gray-700 font-medium text-[17px] space-y-2 mt-2">
+                        <h2 class="text-xl font-black text-warm-orange mb-2">慈雲慈航寺週末駐點 ｜ 重點區域調理</h2>
+                        <ul class="text-gray-700 font-medium text-[16px] space-y-1.5 mt-1">
                             <li class="flex items-start">
                                 <span class="text-warm-orange font-bold mr-2 whitespace-nowrap">特色</span> 
                                 <span>專攻肩頸 ‧ 腰臀，快速釋放壓力找回空間</span>
@@ -152,24 +143,20 @@
                         </ul>
                     </div>
                     <div class="w-1/5 text-right">
-                        <p class="text-2xl font-black text-warm-orange mt-1">$600<span class="text-sm">/次</span></p>
+                        <p class="text-xl font-black text-warm-orange mt-1">$600<span class="text-sm">/次</span></p>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- 第三區：數位升級 AI 評估入口 -->
-        <div class="mt-4 bg-[#EBE9E1] rounded-2xl p-5 flex flex-col items-center justify-center border border-gray-200 shadow-inner">
-            <!-- 移除原標題 -->
-            <!-- 放大引導文字，增加點擊慾望 -->
-            <p class="text-[22px] text-gray-800 mb-4 font-black tracking-wide text-center">讓 AI 助理根據您的狀況<br>進行人體力學初步分析！</p>
-            <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-4 px-10 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-3 text-xl">
+        <div class="mt-4 bg-[#EBE9E1] rounded-2xl p-4 flex flex-col items-center justify-center border border-gray-200 shadow-inner">
+            <p class="text-[20px] text-gray-800 mb-3 font-black tracking-wide text-center">讓 AI 助理根據您的狀況<br>進行人體力學初步分析</p>
+            <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
         </div>
 
-        <!-- AI 評估 Modal (隱藏層) -->
         <div id="ai-modal" class="absolute inset-0 bg-[#F8F7F3] z-50 flex flex-col p-8 pointer-events-none">
             
             <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4 mb-4">
@@ -181,10 +168,8 @@
 
             <div class="flex-1 flex flex-col gap-4 overflow-y-auto pb-4 pr-2">
                 
-                <!-- 結構化表單填寫區 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
                     
-                    <!-- 1. 職業選擇 -->
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">1. 您的主要職業/生活型態？ <span class="text-warm-orange text-sm font-normal">(必填)</span></label>
                         <select id="user-occupation" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-700 bg-gray-50">
@@ -198,7 +183,6 @@
                         </select>
                     </div>
 
-                    <!-- 2. 部位選擇 -->
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">2. 哪裡覺得最不舒服？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
@@ -225,7 +209,6 @@
                         </div>
                     </div>
 
-                    <!-- 3. 症狀感覺 -->
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">3. 主要是什麼樣的感覺？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
@@ -252,7 +235,6 @@
                         </div>
                     </div>
 
-                    <!-- 4. 安全注意事項 -->
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">4. 為了您的安全，是否有以下狀況？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
@@ -280,13 +262,11 @@
                         <p class="text-xs text-gray-400 mt-1">* 若無上述情況，可直接略過</p>
                     </div>
 
-                    <!-- 5. 醫生就醫狀況 -->
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">5. 是否有看過醫生？醫生說什麼？ <span class="text-gray-400 text-sm font-normal">(選填)</span></label>
                         <textarea id="doctor-info" rows="2" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none text-sm" placeholder="例如：醫生說是椎間盤突出、骨刺..."></textarea>
                     </div>
 
-                    <!-- 6. 補充說明 -->
                     <div class="mb-2">
                         <label class="block text-charcoal font-bold mb-2">6. 其他補充說明 <span class="text-gray-400 text-sm font-normal">(選填)</span></label>
                         <textarea id="user-extra" rows="2" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none text-sm" placeholder="例如：早上起床特別痛，或是彎腰時會麻..."></textarea>
@@ -297,7 +277,6 @@
                     </button>
                 </div>
 
-                <!-- 分析結果區塊 -->
                 <div id="result-container" class="hidden bg-[#FFF8F3] p-5 mt-2 rounded-2xl border-2 border-warm-orange shadow-sm relative">
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
@@ -305,8 +284,7 @@
                         <p class="mt-3 text-gray-600 font-bold text-sm">正在結合您的職業與人體力學進行深度分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium">
-                        <!-- AI 內容將顯示在這裡 -->
-                    </div>
+                        </div>
                 </div>
 
             </div>
@@ -316,6 +294,7 @@
 
     <script>
         // 設定 Gemini API Key (系統將在執行環境中提供)
+        // ⚠️ 記得補上您的 API Key 喔！
         const apiKey = ""; 
 
         function openAIModal() {
