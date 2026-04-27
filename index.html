@@ -16,9 +16,8 @@
             min-height: 100vh;
             padding: 2rem;
         }
-        /* 模擬 A4 比例的畫布 (約 210 x 297 mm) */
         .a4-canvas {
-            background-color: #F8F7F3; /* 無印米白底 */
+            background-color: #F8F7F3;
             width: 100%;
             max-width: 794px;
             aspect-ratio: 1 / 1.414;
@@ -73,7 +72,6 @@
 
     <div class="a4-canvas">
         
-        <!-- 第一區：溫暖問候與共鳴 -->
         <div class="text-center mb-4 pt-1">
             <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生脊椎保健 Logo" class="w-full max-w-[320px] mx-auto mb-4">
             
@@ -86,10 +84,8 @@
             </p>
         </div>
 
-        <!-- 第二區：雙向導流選擇 -->
         <div class="flex flex-col gap-4 flex-1 justify-center z-10">
             
-            <!-- 選項 A: 總院 -->
             <div class="border-4 border-charcoal bg-white rounded-2xl p-4 relative shadow-sm">
                 <div class="absolute -top-4 left-6 bg-charcoal text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     隨時可預約
@@ -118,7 +114,6 @@
                 </div>
             </div>
 
-            <!-- 選項 B: 慈航寺 -->
             <div class="border-4 border-warm-orange bg-[#FFF8F3] rounded-2xl p-4 relative shadow-sm">
                 <div class="absolute -top-4 left-6 bg-warm-orange text-white px-4 py-1 rounded-full font-bold text-sm tracking-wider">
                     週末來保養
@@ -149,17 +144,15 @@
 
         </div>
 
-        <!-- 第三區：數位升級 AI 評估入口 -->
         <div class="mt-4 bg-[#EBE9E1] rounded-2xl p-4 flex flex-col items-center justify-center border border-gray-200 shadow-inner">
             <p class="text-[20px] text-gray-800 mb-3 font-black tracking-wide text-center">讓 AI 助理根據您的狀況<br>進行人體力學初步分析</p>
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <!-- 版本檢查標記：幫助確認 GitHub Pages 是否已經更新 -->
-            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.4 - 深度專業版</p>
+            <!-- 標記版本號，確保沒看到舊快取 -->
+            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.5 - 錯誤直接顯示版</p>
         </div>
 
-        <!-- AI 評估 Modal -->
         <div id="ai-modal" class="absolute inset-0 bg-[#F8F7F3] z-50 flex flex-col p-8 pointer-events-none">
             
             <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4 mb-4">
@@ -357,7 +350,7 @@
 
 【絕對規範】
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
-- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
+- 嚴禁診初或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
 - 語氣：從**人體力學**的角度破題，分析具備深度但溫暖不武斷。
 
 你的回答必須包含以下固定段落：
@@ -381,20 +374,27 @@
                 }, 100);
 
             } catch (error) {
+                // 🚀 【終極抓蟲】將錯誤直接印在畫面上給您看！
                 document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('ai-response').innerHTML = '<span class="text-red-500 font-bold">抱歉，AI 伺服器目前忙碌中，請稍後在官方 LINE 上直接留言詢問我們！</span>';
+                document.getElementById('ai-response').innerHTML = `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                        <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
+                        <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：請截圖這個畫面給我，不用再按 F12 了！</p>
+                    </div>
+                `;
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
-        async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
+        async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 3) {
             const safeApiKey = apiKey.trim();
-            // 💡 修正關鍵：固定使用 v1 穩定通道網址，不帶 beta 字樣
             const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
-            // 🚀 關鍵核心：將指令與資料徹底合併傳送，徹底避開 v1 不支援 systemInstruction 欄位的問題
+            // 使用最標準的 payload 格式
             const payload = {
                 contents: [{
+                    role: "user",
                     parts: [{ text: `[系統指令]\n${systemInstruction}\n\n[待評估資料]\n${prompt}` }]
                 }]
             };
@@ -409,14 +409,14 @@
 
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error(`API 錯誤詳情 (${response.status}):`, errorText);
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        // 將詳細錯誤拋出，讓外面的 catch 捕捉並顯示在畫面上
+                        throw new Error(`狀態碼: ${response.status} | 伺服器回傳: ${errorText}`);
                     }
 
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                 } catch (error) {
-                    if (i === maxRetries - 1) throw error;
+                    if (i === maxRetries - 1) throw error; // 最後一次失敗才拋出
                     const delay = Math.pow(2, i) * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                 }
