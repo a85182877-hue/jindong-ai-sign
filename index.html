@@ -156,7 +156,7 @@
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
             <!-- 版本號標記 -->
-            <p class="text-[12px] text-white mt-2 font-bold bg-indigo-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.2 - 語氣自然優化版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-indigo-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.5 - 終極金鑰修正版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -295,8 +295,8 @@
     </div>
 
     <script>
-        // ⚠️【注意】：若要在本頁面右側點擊「預覽」測試，請務必保持此為空字串 ("")。
-        // 若要上傳至 GitHub，請填入您的金鑰 (例如: "AIzaSy...")。
+        // 🛑 聲師傅請注意：請把您自己申請的真實金鑰貼在下方雙引號裡面！
+        // 絕對不能再用舊的假金鑰！
         const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
 
         function openAIModal() {
@@ -323,21 +323,12 @@
             const sensations = Array.from(sensationInputs).map(el => el.value).join('、') || '未具體說明';
             
             const warningInputs = document.querySelectorAll('input[name="warnings"]:checked');
-            const warnings = Array.from(warningInputs).map(el => el.value).join('、') || '無特殊情況';
-
+            const warningsArray = Array.from(warningInputs).map(el => el.value);
+            
             const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
             const extraInfo = document.getElementById('user-extra').value.trim() || '無';
 
-            const clientInfo = `
-                客戶資訊：
-                - 職業/型態：${occupation}
-                - 不適部位：${locations}
-                - 不適感覺：${sensations}
-                - 特殊狀況：${warnings}
-                - 醫生說法：${doctorInfo}
-                - 補充說明：${extraInfo}
-            `;
-
+            // UI 狀態切換
             document.getElementById('result-container').classList.remove('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
             document.getElementById('ai-response').classList.add('hidden');
@@ -347,41 +338,67 @@
                 modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
             }, 100);
 
-            // 🚀 關鍵優化：徹底移除數字標題與機器人自我介紹的語氣
+            // 💡 1. 【保護機制優先攔截】：如果是懷孕或骨折發炎，直接跳過 AI 輸出保護文案
+            if (warningsArray.includes('懷孕中')) {
+                renderFinalResponse("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！");
+                return;
+            }
+            if (warningsArray.includes('近期骨折/急性發炎')) {
+                renderFinalResponse("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在經歷辛苦的修復期！為了您的絕對安全與避免造成二度傷害，我們團隊強烈建議您目前先以醫療院所的診治與充分休息為主，此階段暫時不適合進行整復推拿調理。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！");
+                return;
+            }
+
+            // 💡 2. 【正常的 AI 分析階段】
+            const clientInfo = `
+                客戶資訊：
+                - 職業/型態：${occupation}
+                - 不適部位：${locations}
+                - 不適感覺：${sensations}
+                - 醫生說法：${doctorInfo}
+                - 補充說明：${extraInfo}
+            `;
+
+            // 🚀 徹底洗淨指令：只讓 AI 專注於力學分析，完全不提品牌與法規
             const systemPrompt = `
-【絕對指令】：
-1. 請直接開始分析，**絕對不要**寫出「你好，我是來自筋動人生的師傅」等自我介紹字句。
-2. 回覆內容請融合成一篇自然、溫暖的口語文章。**絕對不要**出現「1.」、「2.」、「品牌理念：」、「法規防護：」、「預約引導：」等任何條列式編號或副標題！
+【極度嚴格指令 - 違反將導致系統崩潰】：
+1. 你是一位專業的傳統整復推拿師傅，請根據客戶資料寫一段大約 150~200 字的純文字力學分析。
+2. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是...師傅」、「了解您的狀況」等廢話）。
+3. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
+4. 絕對不可以寫出任何編號（如「1.」、「2.」）、條列式符號或自訂標題。
+5. 絕對不要寫結語，也不要提供任何預約網址、品牌理念或注意事項，只要單純把「力學代償分析」寫完就馬上停止！
 
 【專業人體力學知識庫】
-- 【下肢與膝蓋】：膝蓋無力通常是因「前側、後側、內側、外側」四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌緊繃會像絞盤一樣拉扯足底筋膜，是足底筋膜炎主因。
-- 【腰背與脊椎】：久坐使前側「髂腰肌」縮短，與後側肌肉「前後拔河」擠壓腰椎空間導致椎間盤突出。駝背會縮短「闊背肌」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
-- 【臀肌與骨盆】：骨盆是承上啟下的橋樑。深層「梨狀肌」失去彈性會擠壓周圍空間影響循環產生麻感。臀中、臀小肌無力會導致地基不穩，逼迫腰部代償引發慢性腰痛。
+- 【下肢與膝蓋】：膝蓋無力通常是因四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌緊繃會像絞盤一樣拉扯足底筋膜。
+- 【腰背與脊椎】：久坐使前側「髂腰肌」縮短，與後側肌肉「前後拔河」擠壓腰椎空間。駝背會縮短「闊背肌」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
+- 【臀肌與骨盆】：深層「梨狀肌」失去彈性會擠壓周圍空間影響循環產生麻感。臀中、臀小肌無力會逼迫腰部代償引發慢性腰痛。
 
 【絕對規範】
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
 - 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
-
-請將以下四段內容，自然地編織進你的回覆文章中（再次強調，文章中不要加標題）：
-[痛點與力學分析]：根據客戶資訊，從**人體力學**的角度破題，分析具備深度但溫暖不武斷。
-[品牌理念]：必須包含「我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。」
-[法規防護]：必須包含「**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。」
-[結尾與預約]：必須包含「以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\n您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\n👉 官方預約連結：https://lin.ee/vkwcVbs」
             `;
 
             try {
-                const response = await callGeminiWithAutoRoute(clientInfo, systemPrompt);
-                let formattedResponse = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
+                // 取得 AI 單純的分析文字
+                let aiAnalysis = await callGeminiWithAutoRoute(clientInfo, systemPrompt);
                 
-                document.getElementById('ai-response').innerHTML = formattedResponse;
-                document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('ai-response').classList.remove('hidden');
+                // 💡 3. 【系統自動拼接文案】：固定且排版完美的後續文字
+                let finalResponse = aiAnalysis.trim() + "\n\n";
                 
-                setTimeout(() => {
-                    const modalBody = document.querySelector('.overflow-y-auto');
-                    modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
-                }, 100);
+                finalResponse += "我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。\n\n";
+                
+                finalResponse += "**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。\n\n";
+                
+                // 如果有勾選其他特殊狀況（骨鬆、心血管等）
+                if (warningsArray.length > 0) {
+                    finalResponse += `⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，為了您的安全，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！\n\n`;
+                }
+
+                finalResponse += "以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\n";
+                finalResponse += "您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\n";
+                finalResponse += "👉 官方預約連結：https://lin.ee/vkwcVbs";
+
+                // 渲染至畫面
+                renderFinalResponse(finalResponse);
 
             } catch (error) {
                 document.getElementById('loading-state').classList.add('hidden');
@@ -389,20 +406,45 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：如果要在本頁面右側預覽，請確認程式碼內的 apiKey 是空的 ("")。如果要放上 GitHub，請確認您已填入最新申請的金鑰。</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：若出現這行，請截圖給我看！</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
+        // 將組合好的文字轉換為 HTML 並顯示
+        function renderFinalResponse(text) {
+            let formattedResponse = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
+            
+            document.getElementById('ai-response').innerHTML = formattedResponse;
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('ai-response').classList.remove('hidden');
+            
+            setTimeout(() => {
+                const modalBody = document.querySelector('.overflow-y-auto');
+                modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
+            }, 100);
+        }
+
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
+            // 防呆機制：檢查是否不小心用了我之前亂打的假金鑰
+            if (apiKey.includes("XYMNnk") || apiKey.includes("EXXtI")) {
+                throw new Error("⚠️ 聲師傅，您不小心用到我之前隨手打的「假金鑰」了！請換成您在 Google AI Studio 複製的那一串真實金鑰！");
+            }
+
             const isPreviewEnvironment = (!apiKey || apiKey.trim() === "");
+            if (!isPreviewEnvironment && apiKey.trim().length < 20) {
+                 throw new Error("⚠️ 您填寫的 API Key 看起來太短了，請確認是否有複製完整。");
+            }
+            
             const keyParam = isPreviewEnvironment ? "" : `?key=${apiKey.trim()}`;
             
             const endpointsToTry = [
                 `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent${keyParam}`,
                 `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent${keyParam}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent${keyParam}`,
                 `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent${keyParam}`
             ];
 
@@ -429,7 +471,7 @@
                         lastErrorMessage = `嘗試 ${url.split('models/')[1].split(':')[0]} 失敗: ${errorText}`;
                         
                         if (response.status === 400 && errorText.includes("API_KEY_INVALID")) {
-                            throw new Error("API Key 無效！請確認金鑰複製完整。");
+                            throw new Error("API Key 無效！請確認您的金鑰複製正確，且沒有多餘的空白。");
                         }
                         continue; 
                     }
@@ -438,11 +480,11 @@
                     return data.candidates[0].content.parts[0].text;
                 } catch (error) {
                     lastErrorMessage = error.message;
-                    if (error.message.includes("API Key")) throw error;
+                    if (error.message.includes("API Key") || error.message.includes("假金鑰")) throw error;
                 }
             }
 
-            throw new Error(`您的金鑰尚未開通這些模型權限，請確認是否為新專案產生的金鑰。最後錯誤: \n${lastErrorMessage}`);
+            throw new Error(`您的金鑰尚未開通這些模型權限。請確認這是新專案產生的有效金鑰。最後錯誤: \n${lastErrorMessage}`);
         }
     </script>
 </body>
