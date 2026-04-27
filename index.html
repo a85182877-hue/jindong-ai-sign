@@ -161,7 +161,7 @@
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
             <!-- 版本檢查標記 -->
-            <p class="text-[10px] text-gray-400 mt-2">Ver. 1.0.1 (穩定版通道)</p>
+            <p class="text-[10px] text-gray-400 mt-2">Ver. 1.0.2 (終極相容版)</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -176,7 +176,7 @@
 
             <div class="flex-1 flex flex-col gap-4 overflow-y-auto pb-4 pr-2">
                 
-                <!-- 表單內容保持不變 -->
+                <!-- 表單填寫區 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
                     
                     <div class="mb-4">
@@ -294,6 +294,7 @@
                         <p class="mt-3 text-gray-600 font-bold text-sm">正在結合您的職業與人體力學進行深度分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium">
+                        <!-- AI 回覆內容 -->
                     </div>
                 </div>
 
@@ -359,12 +360,12 @@
                 使用者會提供他們的職業型態、不適部位與就醫/特殊狀況。
                 請以溫暖、專業、平易近人的口吻（繁體中文）回答，字數控制在 400 字以內。
                 
-                【專業人體力學知識庫（請運用以下底層邏輯進行推演，轉化為白話解說）】
+                【專業人體力學知識庫】
                 - 【腰臀】：久坐易讓前側「髂腰肌」緊縮，與後側腹肌、腰胸筋膜形成「前後拔河」擠壓腰椎空間；若深層「梨狀肌」失去彈性，通常容易擠壓到周圍空間，影響循環而產生麻感。外圍臀肌若失去支撐力，身體就會強迫往上抓取「腰部」的肌肉來代償。
                 - 【上背/肩頸/頭部】：長期駝背前傾，會讓連接手臂與骨盆的巨大牽引繩索「闊背肌」縮短繃緊，間接引發膏肓處緊繃；而前側胸部肌肉若長期縮短，可能會往下拉扯頸椎與肩膀。
                 - 【腿部/膝蓋/足底】：骨盆若失衡，會讓大腿的四大肌肉鋼索對膝蓋產生「前後夾擊、左右拉扯」，導致膝蓋空間被壓縮而感到卡卡的；失衡力量若往下重擊，會逼著小腿避震系統（腓腸肌）緊縮，拉扯足底筋膜。
 
-                【絕對合規紅線與用語規範（極度重要）】
+                【絕對合規紅線與用語規範】
                 - 絕對不能有任何醫療宣稱、診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎等）。
                 - 絕對禁止使用「神經」、「壓迫神經」或「神經通道」等字眼！若需解釋麻感，請一律用「擠壓周圍空間，影響循環產生痠麻感」來替代。
                 - 提及骨骼或痠痛問題時，必須客觀視為空間被擠壓的「物理現象與力學代償結果」。
@@ -380,12 +381,12 @@
                    「我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。」
                 5. 病理/醫生診斷轉譯：
                    「**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。」
-                6. 特殊狀況安全提醒（如鋼釘等）：獨立提醒，告知師傅。
+                6. 特殊狀況安全提醒：如勾選鋼釘等其他狀況，請獨立提醒並告知來現場要跟師傅說。
                 7. 結尾強制金句與預約：
                    「以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\\n您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\\n👉 官方預約連結：https://lin.ee/vkwcVbs」
                 
                 【嚴格排版要求：橘色標記限制】
-                只允許在以下五個特定詞句加上雙星號：
+                只允許在以下五個特定詞句加上雙星號標記為粗體，其餘文字嚴禁加粗體：
                 1. **我們不針對疾病做治療**
                 2. **非結構性破壞**
                 3. **幫身體找回原本自在的空間與平衡**
@@ -409,19 +410,23 @@
 
             } catch (error) {
                 document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('ai-response').innerHTML = '<span class="text-red-500 font-bold">抱歉，AI 師傅目前忙碌中，請稍後在官方 LINE 上直接留言詢問我們！</span>';
+                document.getElementById('ai-response').innerHTML = '<span class="text-red-500 font-bold">抱歉，AI 師傅目前稍忙中，請直接在官方 LINE 上留言詢問我們！</span>';
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 5) {
-            // 🚀 最終確認：使用穩定版 v1 通道，不帶 beta 字樣
+            // 💡 修正點：使用 v1 穩定版網址，並將金鑰修剪空白
             const safeApiKey = apiKey.trim();
             const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
+            // 🚀 關鍵核心：將指令合併到 contents 中，徹底避開 API 欄位不認得的問題
+            const combinedText = `[請嚴格執行以下系統指令]\n${systemInstruction}\n\n[待分析客戶資料如下]\n${prompt}`;
+
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemInstruction }] }
+                contents: [{
+                    parts: [{ text: combinedText }]
+                }]
             };
 
             for (let i = 0; i < maxRetries; i++) {
@@ -434,7 +439,7 @@
 
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error(`Google API 錯誤報告:`, errorText);
+                        console.error(`Google API 失敗回報 (${response.status}):`, errorText);
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
