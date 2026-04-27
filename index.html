@@ -155,8 +155,8 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <!-- 標記版本號，確保沒看到舊快取 -->
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.0 - 智能連線尋路版</p>
+            <!-- 版本號標記 -->
+            <p class="text-[12px] text-white mt-2 font-bold bg-indigo-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.2 - 語氣自然優化版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -284,7 +284,7 @@
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
                         <div class="loader"></div>
-                        <p class="mt-3 text-gray-600 font-bold text-sm">正在智慧搜尋可用通道進行深度分析...</p>
+                        <p class="mt-3 text-gray-600 font-bold text-sm">正在智慧掃描可用模型進行深度分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium"></div>
                 </div>
@@ -295,7 +295,8 @@
     </div>
 
     <script>
-        // ✅ 已經為您保留最新的 API Key
+        // ⚠️【注意】：若要在本頁面右側點擊「預覽」測試，請務必保持此為空字串 ("")。
+        // 若要上傳至 GitHub，請填入您的金鑰 (例如: "AIzaSy...")。
         const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
 
         function openAIModal() {
@@ -346,9 +347,11 @@
                 modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
             }, 100);
 
+            // 🚀 關鍵優化：徹底移除數字標題與機器人自我介紹的語氣
             const systemPrompt = `
-你是一位來自「筋動人生」傳統整復推拿的資深師傅，擅長「人體力學」與「結構力學」分析。
-請根據客戶提供的資訊進行深度專業評估。
+【絕對指令】：
+1. 請直接開始分析，**絕對不要**寫出「你好，我是來自筋動人生的師傅」等自我介紹字句。
+2. 回覆內容請融合成一篇自然、溫暖的口語文章。**絕對不要**出現「1.」、「2.」、「品牌理念：」、「法規防護：」、「預約引導：」等任何條列式編號或副標題！
 
 【專業人體力學知識庫】
 - 【下肢與膝蓋】：膝蓋無力通常是因「前側、後側、內側、外側」四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌緊繃會像絞盤一樣拉扯足底筋膜，是足底筋膜炎主因。
@@ -357,13 +360,13 @@
 
 【絕對規範】
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
-- 嚴禁診初或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
-- 語氣：從**人體力學**的角度破題，分析具備深度但溫暖不武斷。
+- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。
 
-你的回答必須包含以下固定段落：
-1. 品牌理念：我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念...
-2. 法規防護：**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題...
-3. 預約引導：官方預約連結 https://lin.ee/vkwcVbs
+請將以下四段內容，自然地編織進你的回覆文章中（再次強調，文章中不要加標題）：
+[痛點與力學分析]：根據客戶資訊，從**人體力學**的角度破題，分析具備深度但溫暖不武斷。
+[品牌理念]：必須包含「我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。」
+[法規防護]：必須包含「**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。」
+[結尾與預約]：必須包含「以上為您的身體簡易評估，詳細情況建議找專業的師傅們做現場諮詢來更為了解您的身體狀況，我們放心您也安心😊\n您可以直接在我們的官方 LINE 上留言想預約的時段與地點，將會有專人為您安排！\n👉 官方預約連結：https://lin.ee/vkwcVbs」
             `;
 
             try {
@@ -381,35 +384,29 @@
                 }, 100);
 
             } catch (error) {
-                // 發生錯誤時顯示詳細資訊在畫面上
                 document.getElementById('loading-state').classList.add('hidden');
                 document.getElementById('ai-response').innerHTML = `
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：系統已嘗試所有通道。請截圖此畫面給我！</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：如果要在本頁面右側預覽，請確認程式碼內的 apiKey 是空的 ("")。如果要放上 GitHub，請確認您已填入最新申請的金鑰。</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
-        // 🚀 【終極殺手鐧】：自動尋路系統，撞破門為止
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
-            if (!apiKey || apiKey === "") {
-                throw new Error("⚠️ 尚未填寫 API Key！");
-            }
-            const safeApiKey = apiKey.trim();
+            const isPreviewEnvironment = (!apiKey || apiKey.trim() === "");
+            const keyParam = isPreviewEnvironment ? "" : `?key=${apiKey.trim()}`;
             
-            // 準備 Google 所有的可能通道與模型名稱（系統會自動一個個試）
             const endpointsToTry = [
-                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`,
-                `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${safeApiKey}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${safeApiKey}`
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent${keyParam}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent${keyParam}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent${keyParam}`
             ];
 
-            const combinedText = `請嚴格遵循以下系統設定來回答問題：\n\n${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
+            const combinedText = `${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
 
             const payload = {
                 contents: [{
@@ -419,7 +416,6 @@
 
             let lastErrorMessage = "";
 
-            // 自動迴圈嘗試每一條通道
             for (const url of endpointsToTry) {
                 try {
                     const response = await fetch(url, {
@@ -430,18 +426,14 @@
 
                     if (!response.ok) {
                         const errorText = await response.text();
-                        lastErrorMessage = `網址: ${url.split('?')[0]} \n狀態碼: ${response.status} \n伺服器: ${errorText}`;
+                        lastErrorMessage = `嘗試 ${url.split('models/')[1].split(':')[0]} 失敗: ${errorText}`;
                         
-                        // 如果是金鑰錯誤，不用試了直接拋出
                         if (response.status === 400 && errorText.includes("API_KEY_INVALID")) {
-                            throw new Error("API Key 無效或過期，請重新申請！");
+                            throw new Error("API Key 無效！請確認金鑰複製完整。");
                         }
-                        
-                        // 遇到 404 就換下一個網址繼續撞
                         continue; 
                     }
 
-                    // 成功連線！
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                 } catch (error) {
@@ -450,8 +442,7 @@
                 }
             }
 
-            // 如果全部試完還是失敗
-            throw new Error(`所有連線方式皆被 Google 拒絕。最後錯誤: \n${lastErrorMessage}`);
+            throw new Error(`您的金鑰尚未開通這些模型權限，請確認是否為新專案產生的金鑰。最後錯誤: \n${lastErrorMessage}`);
         }
     </script>
 </body>
