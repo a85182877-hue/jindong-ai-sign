@@ -156,7 +156,7 @@
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
             <!-- 標記版本號，確保沒看到舊快取 -->
-            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.6 - 穩定連線版</p>
+            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.7 - 終極修復版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -396,8 +396,8 @@
 
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 3) {
             const safeApiKey = apiKey.trim();
-            // 🚀 【解決方案核心】：換回 v1beta，並且指定最新版本 gemini-1.5-flash-latest
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${safeApiKey}`;
+            // 🚀 【終極修正】：移除 -latest，使用最標準乾淨的 gemini-1.5-flash
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
             // 使用最標準的 payload 格式
             const payload = {
