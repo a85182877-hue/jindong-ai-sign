@@ -156,7 +156,7 @@
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
             <!-- 標記版本號，確保沒看到舊快取 -->
-            <p class="text-[12px] text-white mt-2 font-bold bg-warm-orange px-3 py-1 rounded-full shadow-sm">Ver 1.0.9 - 全新金鑰測試版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.0 - 智能連線尋路版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -284,7 +284,7 @@
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
                         <div class="loader"></div>
-                        <p class="mt-3 text-gray-600 font-bold text-sm">正在結合您的職業與人體力學進行深度分析...</p>
+                        <p class="mt-3 text-gray-600 font-bold text-sm">正在智慧搜尋可用通道進行深度分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium"></div>
                 </div>
@@ -295,8 +295,7 @@
     </div>
 
     <script>
-        // ⚠️ 聲師傅：請在這裡填入您「全新申請的」 API Key！
-        // 確保在雙引號裡面，且沒有空格
+        // ✅ 已經為您保留最新的 API Key
         const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
 
         function openAIModal() {
@@ -368,7 +367,7 @@
             `;
 
             try {
-                const response = await callGeminiWithRetry(clientInfo, systemPrompt);
+                const response = await callGeminiWithAutoRoute(clientInfo, systemPrompt);
                 let formattedResponse = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
                 
@@ -388,23 +387,28 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：若出現 400，代表您的金鑰未填妥。若出現其他錯誤，請截圖此畫面給我！</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：系統已嘗試所有通道。請截圖此畫面給我！</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
             }
         }
 
-        async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 3) {
+        // 🚀 【終極殺手鐧】：自動尋路系統，撞破門為止
+        async function callGeminiWithAutoRoute(prompt, systemInstruction) {
             if (!apiKey || apiKey === "") {
-                throw new Error("⚠️ 尚未填寫 API Key！請將您全新申請的金鑰貼入程式碼中。");
+                throw new Error("⚠️ 尚未填寫 API Key！");
             }
             const safeApiKey = apiKey.trim();
             
-            // 🚀 最穩定通道：使用 v1beta 與 gemini-1.5-flash
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
-            
-            // 採用純文字合併法，規避欄位報錯
+            // 準備 Google 所有的可能通道與模型名稱（系統會自動一個個試）
+            const endpointsToTry = [
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${safeApiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${safeApiKey}`
+            ];
+
             const combinedText = `請嚴格遵循以下系統設定來回答問題：\n\n${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
 
             const payload = {
@@ -413,7 +417,10 @@
                 }]
             };
 
-            for (let i = 0; i < maxRetries; i++) {
+            let lastErrorMessage = "";
+
+            // 自動迴圈嘗試每一條通道
+            for (const url of endpointsToTry) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
@@ -423,17 +430,28 @@
 
                     if (!response.ok) {
                         const errorText = await response.text();
-                        throw new Error(`狀態碼: ${response.status} | 伺服器回傳: ${errorText}`);
+                        lastErrorMessage = `網址: ${url.split('?')[0]} \n狀態碼: ${response.status} \n伺服器: ${errorText}`;
+                        
+                        // 如果是金鑰錯誤，不用試了直接拋出
+                        if (response.status === 400 && errorText.includes("API_KEY_INVALID")) {
+                            throw new Error("API Key 無效或過期，請重新申請！");
+                        }
+                        
+                        // 遇到 404 就換下一個網址繼續撞
+                        continue; 
                     }
 
+                    // 成功連線！
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                 } catch (error) {
-                    if (i === maxRetries - 1) throw error; 
-                    const delay = Math.pow(2, i) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
+                    lastErrorMessage = error.message;
+                    if (error.message.includes("API Key")) throw error;
                 }
             }
+
+            // 如果全部試完還是失敗
+            throw new Error(`所有連線方式皆被 Google 拒絕。最後錯誤: \n${lastErrorMessage}`);
         }
     </script>
 </body>
