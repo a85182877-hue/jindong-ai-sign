@@ -155,8 +155,8 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <!-- 版本號標記 -->
-            <p class="text-[12px] text-white mt-2 font-bold bg-indigo-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.5 - 終極金鑰修正版</p>
+            <!-- 版本號標記，若您沒看到 1.1.6 代表您還在舊快取！ -->
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.6 - 終極快取破解版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -295,8 +295,8 @@
     </div>
 
     <script>
-        // 🛑 聲師傅請注意：請把您自己申請的真實金鑰貼在下方雙引號裡面！
-        // 絕對不能再用舊的假金鑰！
+        // 🛑 聲師傅請注意：請務必把您親手申請的真實金鑰貼在這裡！！！
+        // 絕對不能留空，也不能貼回舊的假金鑰！
         const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
 
         function openAIModal() {
@@ -338,7 +338,7 @@
                 modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
             }, 100);
 
-            // 💡 1. 【保護機制優先攔截】：如果是懷孕或骨折發炎，直接跳過 AI 輸出保護文案
+            // 💡 1. 【保護機制優先攔截】：如果是懷孕或骨折發炎，這兩個會「直接跳過連線」，這就是為什麼它們剛剛可以通！
             if (warningsArray.includes('懷孕中')) {
                 renderFinalResponse("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！");
                 return;
@@ -431,7 +431,7 @@
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
             // 防呆機制：檢查是否不小心用了我之前亂打的假金鑰
             if (apiKey.includes("XYMNnk") || apiKey.includes("EXXtI")) {
-                throw new Error("⚠️ 聲師傅，您不小心用到我之前隨手打的「假金鑰」了！請換成您在 Google AI Studio 複製的那一串真實金鑰！");
+                throw new Error("⚠️ 聲師傅，您不小心用到我之前隨手打的「假金鑰」了！請在程式碼裡換成您真實的金鑰！");
             }
 
             const isPreviewEnvironment = (!apiKey || apiKey.trim() === "");
@@ -441,11 +441,11 @@
             
             const keyParam = isPreviewEnvironment ? "" : `?key=${apiKey.trim()}`;
             
+            // 使用最普遍支援的模型與通道
             const endpointsToTry = [
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent${keyParam}`,
                 `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent${keyParam}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent${keyParam}`,
-                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent${keyParam}`
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent${keyParam}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent${keyParam}`
             ];
 
             const combinedText = `${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
@@ -484,7 +484,7 @@
                 }
             }
 
-            throw new Error(`您的金鑰尚未開通這些模型權限。請確認這是新專案產生的有效金鑰。最後錯誤: \n${lastErrorMessage}`);
+            throw new Error(`連線失敗。請確認是否為新專案產生的有效金鑰。最後錯誤: \n${lastErrorMessage}`);
         }
     </script>
 </body>
