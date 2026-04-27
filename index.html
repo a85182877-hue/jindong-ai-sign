@@ -156,7 +156,7 @@
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
             <!-- 標記版本號，確保沒看到舊快取 -->
-            <p class="text-[12px] text-gray-500 mt-2 font-bold bg-white px-2 py-1 rounded">Ver 1.0.7 - 終極修復版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-warm-orange px-3 py-1 rounded-full shadow-sm">Ver 1.0.9 - 全新金鑰測試版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -295,8 +295,9 @@
     </div>
 
     <script>
-        // 設定您的 Gemini API Key
-        const apiKey = "AIzaSyCr1tTrjyUZDffsYCHpSgAvqmtZvXYMNnk"; 
+        // ⚠️ 聲師傅：請在這裡填入您「全新申請的」 API Key！
+        // 確保在雙引號裡面，且沒有空格
+        const apiKey = "AIzaSyC3XgByOib2GTvSdCWTMncUF5RX3AEXXtI"; 
 
         function openAIModal() {
             const modal = document.getElementById('ai-modal');
@@ -387,7 +388,7 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：請截圖這個畫面給我，不用再按 F12 了！</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 聲師傅：若出現 400，代表您的金鑰未填妥。若出現其他錯誤，請截圖此畫面給我！</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
@@ -395,15 +396,20 @@
         }
 
         async function callGeminiWithRetry(prompt, systemInstruction, maxRetries = 3) {
+            if (!apiKey || apiKey === "") {
+                throw new Error("⚠️ 尚未填寫 API Key！請將您全新申請的金鑰貼入程式碼中。");
+            }
             const safeApiKey = apiKey.trim();
-            // 🚀 【終極修正】：移除 -latest，使用最標準乾淨的 gemini-1.5-flash
+            
+            // 🚀 最穩定通道：使用 v1beta 與 gemini-1.5-flash
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${safeApiKey}`;
             
-            // 使用最標準的 payload 格式
+            // 採用純文字合併法，規避欄位報錯
+            const combinedText = `請嚴格遵循以下系統設定來回答問題：\n\n${systemInstruction}\n\n==================\n\n待分析的客戶狀況如下：\n${prompt}`;
+
             const payload = {
                 contents: [{
-                    role: "user",
-                    parts: [{ text: `[系統指令]\n${systemInstruction}\n\n[待評估資料]\n${prompt}` }]
+                    parts: [{ text: combinedText }]
                 }]
             };
 
