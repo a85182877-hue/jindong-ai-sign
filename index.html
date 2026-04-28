@@ -299,7 +299,7 @@
         // ==========================================
         
         // 1. 填入您最新申請的 Google API Key
-        const apiKey = "AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20"; // 👈 在引號內填入您新申請的 API Key
+        const apiKey = "AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20"; // 👈 您申請的真實 API Key 放這裡！
         
         // 2. 填入您的 GitHub Pages 網域 (重要！防盜刷機制)
         // 例如：您的網址是 https://myaccount.github.io/myproject
@@ -435,12 +435,13 @@
         // 更新為標準的 API 呼叫格式，並加入重試機制
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
             
-            // 使用您在最上方設定的金鑰
-            if (!apiKey || apiKey === "您申請的真實金鑰") {
+            // 使用您在最上方設定的金鑰 (🚨 聲師傅注意：這裡的防呆文字千萬不要改成您的真實金鑰！)
+            if (!apiKey || apiKey === "您申請的真實金鑰" || apiKey === "這裡填入您的真實金鑰") {
                 throw new Error("請先在程式碼最上方填入您真實的 API Key！");
             }
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            // ⚠️ 已經為您更換為最穩定且所有帳號皆可用的 gemini-1.5-flash 模型
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
