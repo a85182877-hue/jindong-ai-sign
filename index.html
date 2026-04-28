@@ -155,7 +155,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 1.1.7 - 修正防呆與穩定版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 2.0.0 - 終極前端防護版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -294,12 +294,19 @@
     </div>
 
     <script>
-        // 🛑 聲師傅請注意：
-        // 1. 先去 Google AI Studio 申請一把「全新的」 API Key。
-        // 2. 如果要放在 GitHub 上公開，請務必到 Google Cloud Console 中，
-        //    為這把 API Key 加上「API 限制 (HTTP referrers)」，只允許你的 GitHub Pages 網址使用，
-        //    否則 Google 掃描到公開金鑰會立刻封鎖它！
-        const apiKey = "AIzaSyBkzk2VI7VZS4fy2Z1Oxlvlr4vpemmmCX4"; // 👈 部署時，請在這裡填入你新申請的金鑰！
+        // ==========================================
+        // 🔴 終極防護網設定區 (請務必填寫這兩行！)
+        // ==========================================
+        
+        // 1. 填入您最新申請的 Google API Key
+        const apiKey = "AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20"; // 👈 在引號內填入您新申請的 API Key
+        
+        // 2. 填入您的 GitHub Pages 網域 (重要！防盜刷機制)
+        // 例如：您的網址是 https://myaccount.github.io/myproject
+        // 這裡只要填寫：myaccount.github.io
+        const allowedDomain = "a85182877-hue.github.io"; // 👈 在引號內填寫您的 GitHub 網域
+
+        // ==========================================
 
         function openAIModal() {
             const modal = document.getElementById('ai-modal');
@@ -314,6 +321,17 @@
         }
 
         async function analyzeSymptoms() {
+            // --- 終極防盜刷檢查 ---
+            const currentDomain = window.location.hostname;
+            
+            // 如果不是在本機測試 (localhost) 且網域不符合您設定的網域，就直接擋下來！
+            // 這樣就算駭客偷走您的金鑰，在他的網站上也無法使用。
+            if (currentDomain !== "localhost" && currentDomain !== "127.0.0.1" && !currentDomain.includes(allowedDomain)) {
+                alert(`⚠️ 安全警告：此功能僅限於官方網站 [${allowedDomain}] 使用。目前的網域 (${currentDomain}) 遭到阻擋。`);
+                return;
+            }
+            // ---------------------
+
             const occupation = document.getElementById('user-occupation').value;
             if (!occupation) return alert('請先選擇您的職業/生活型態哦！');
 
@@ -393,7 +411,7 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">請確認您的 API Key 是否正確且未被停用。</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">請確認您的 API Key 是否填寫正確。</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
@@ -416,14 +434,13 @@
 
         // 更新為標準的 API 呼叫格式，並加入重試機制
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
-            // 在此預覽平台會自動注入，若您要部署請在上方 const apiKey 填寫
-            const activeKey = apiKey || (typeof window !== 'undefined' && window.__GEMINI_API_KEY__ ? window.__GEMINI_API_KEY__ : "");
             
-            if (!activeKey) {
-                throw new Error("API Key 為空！請在程式碼中填入您申請的金鑰。");
+            // 使用您在最上方設定的金鑰
+            if (!apiKey || apiKey === "您申請的真實金鑰") {
+                throw new Error("請先在程式碼最上方填入您真實的 API Key！");
             }
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${activeKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
