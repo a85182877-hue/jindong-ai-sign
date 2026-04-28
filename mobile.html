@@ -309,26 +309,59 @@
 - 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎、治療）。
 - 替換詞：調理、放鬆、釋放壓力、平衡、身體順開、喚醒肌肉、找回空間。`;
 
-            try {
-                const resp = await fetch(WORKER_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ model: "gemini", clientInfo, systemPrompt }),
-                });
+            const payload = JSON.stringify({ model: "gemini", clientInfo, systemPrompt });
+            const maxRetries = 3;
+            let lastError = null;
+            let success = false;
 
-                const data = await resp.json();
-                if (!resp.ok || data.error) throw new Error(data.error || `錯誤 ${resp.status}`);
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    if (attempt > 1) {
+                        document.getElementById('loading-text').innerText = `AI 伺服器忙碌中，第 ${attempt} 次重試...`;
+                        await new Promise(r => setTimeout(r, 2500 * (attempt - 1)));
+                    }
 
-                loadingState.classList.add('hidden');
-                renderResult(data.result.trim(), warningsArray, true);
+                    const resp = await fetch(WORKER_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: payload,
+                    });
 
-            } catch (err) {
+                    const data = await resp.json();
+
+                    // 503 流量過載 → 重試
+                    if (resp.status === 503 || (data.error && data.error.includes('503'))) {
+                        lastError = new Error('503');
+                        continue;
+                    }
+
+                    if (!resp.ok || data.error) {
+                        lastError = new Error(data.error || `錯誤 ${resp.status}`);
+                        break; // 非 503 錯誤不重試
+                    }
+
+                    loadingState.classList.add('hidden');
+                    renderResult(data.result.trim(), warningsArray, true);
+                    success = true;
+                    break;
+
+                } catch (err) {
+                    lastError = err;
+                    break;
+                }
+            }
+
+            if (!success) {
                 loadingState.classList.add('hidden');
                 resultCard.classList.remove('hidden');
                 aiResponse.innerHTML = `
                     <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded-lg">
                         <p class="text-red-700 font-bold text-sm mb-1">❌ 連線發生錯誤</p>
-                        <p class="text-xs text-gray-600 font-mono break-all">${err.message}</p>
+                        <p class="text-xs text-gray-600 break-all">${
+                            lastError?.message?.includes('503')
+                            ? 'AI 伺服器目前流量過高，請稍等片刻後再試一次 🙏'
+                            : lastError?.message
+                        }</p>
                     </div>`;
             }
         }
