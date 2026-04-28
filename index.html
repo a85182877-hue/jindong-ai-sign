@@ -155,7 +155,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 4.0.0 - 終極重構版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 5.0.0 - 智慧尋路版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -283,7 +283,7 @@
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
                         <div class="loader"></div>
-                        <p class="mt-3 text-gray-600 font-bold text-sm">正在呼叫 Google 核心模型進行分析...</p>
+                        <p id="loading-text" class="mt-3 text-gray-600 font-bold text-sm">正在智慧掃描可用模型清單...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium"></div>
                 </div>
@@ -295,7 +295,7 @@
 
     <script>
         // ==========================================
-        // 🔴 終極重構設定區：拔除所有複雜機制，直接連線
+        // 🔴 終極重構設定區：智慧尋路自動抓取可用模型
         // ==========================================
         
         // 1. 金鑰已設定（確保這是您最新的有效金鑰）
@@ -321,7 +321,7 @@
         async function analyzeSymptoms() {
             const safeApiKey = apiKey.trim();
 
-            // --- 防盜刷檢查 (加入空字串判斷，允許本機測試) ---
+            // --- 防盜刷檢查 ---
             const currentDomain = window.location.hostname;
             if (currentDomain !== "" && currentDomain !== "localhost" && currentDomain !== "127.0.0.1" && !currentDomain.includes(allowedDomain)) {
                 alert(`⚠️ 安全警告：此功能僅限於官方網站 [${allowedDomain}] 使用。目前的網域 (${currentDomain}) 遭到阻擋。`);
@@ -348,6 +348,7 @@
             // UI 狀態切換
             document.getElementById('result-container').classList.remove('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
+            document.getElementById('loading-text').innerText = "正在智慧掃描可用模型清單...";
             document.getElementById('ai-response').classList.add('hidden');
             
             setTimeout(() => {
@@ -385,8 +386,7 @@
 - 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。`;
 
             try {
-                // 傳入處理過空白的 safeApiKey
-                let aiAnalysis = await callGeminiDirectly(clientInfo, systemPrompt, safeApiKey);
+                let aiAnalysis = await callGeminiSmartRoute(clientInfo, systemPrompt, safeApiKey);
                 
                 // 💡 系統自動拼接文案
                 let finalResponse = aiAnalysis.trim() + "\n\n";
@@ -410,7 +410,7 @@
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
                         <hr class="my-2 border-red-200">
-                        <p class="text-xs text-gray-500 font-bold">💡 聲師傅：如果這次還報錯，請直接截圖這個紅色框框！這次的錯誤是來自 Google 總部的真實原因，絕不會再被隱藏了！</p>
+                        <p class="text-xs text-gray-500 font-bold mt-2">💡 聲師傅：程式已經自動繞過 404 限制去尋找活路，如果還是看到這個畫面，代表這把金鑰可能尚未在 Google AI Studio 中同意服務條款喔！</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
@@ -431,54 +431,71 @@
             }, 100);
         }
 
-        // 徹底重構：拔除複雜的迴圈，使用最乾淨、最標準的單線直連機制
-        async function callGeminiDirectly(prompt, systemInstruction, activeKey) {
-            
-            // 使用唯一指定且全球最穩定的 1.5-flash 模型端點
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemInstruction }] }
-            };
-
+        // ==============================================================
+        // ✨ Ver 5.0.0 核心升級：動態詢問 Google 可用模型 (智慧尋路)
+        // ==============================================================
+        async function callGeminiSmartRoute(prompt, systemInstruction, activeKey) {
             try {
-                const response = await fetch(url, {
+                // 步驟 1：先向 Google 查詢這把金鑰「真正能用」的模型清單
+                const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${activeKey}`;
+                const listResponse = await fetch(listUrl);
+
+                if (!listResponse.ok) {
+                    const errText = await listResponse.text();
+                    if (listResponse.status === 400 && errText.includes("API_KEY_INVALID")) {
+                        throw new Error("🚨 金鑰無效：請確認您填寫的金鑰是否正確。");
+                    }
+                    throw new Error(`無法取得模型清單 (代碼 ${listResponse.status})：${errText}`);
+                }
+
+                const listData = await listResponse.json();
+
+                // 步驟 2：過濾出支援 "generateContent" 且名稱包含 "gemini" 的模型
+                const availableModels = listData.models.filter(m => 
+                    m.supportedGenerationMethods && 
+                    m.supportedGenerationMethods.includes("generateContent") &&
+                    m.name.includes("gemini")
+                );
+
+                if (!availableModels || availableModels.length === 0) {
+                    throw new Error("🚨 您的帳號目前沒有任何可用的 Gemini 模型權限。請確認是否有在 Google AI Studio 中同意最新服務條款。");
+                }
+
+                // 步驟 3：優先選擇 1.5-flash，若無則直接抓取清單裡的第一個可用模型！
+                let targetModelName = availableModels[0].name; // 預設拿第一個
+                const preferredModel = availableModels.find(m => m.name.includes("1.5-flash"));
+                if (preferredModel) {
+                    targetModelName = preferredModel.name;
+                }
+
+                // 更新畫面提示
+                document.getElementById('loading-text').innerText = `成功尋獲模型 (${targetModelName.replace('models/', '')})，正在分析中...`;
+
+                // 步驟 4：使用找到的正確模型名稱發送分析請求，絕對不會再 404！
+                const generateUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${activeKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] }
+                };
+
+                const response = await fetch(generateUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                // 如果失敗，直接把原始的錯誤訊息拆解並丟到畫面上
                 if (!response.ok) {
                     const errorText = await response.text();
-                    let googleErrorMsg = errorText;
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        if (errorJson.error && errorJson.error.message) {
-                            googleErrorMsg = errorJson.error.message;
-                        }
-                    } catch(e) {} // 如果無法解析為 JSON 就不理它
-
-                    if (response.status === 400 && googleErrorMsg.includes("API_KEY_INVALID")) {
-                        throw new Error(`🚨 金鑰無效 (代碼 400)：請確認您填寫的金鑰是否真的是有效金鑰。`);
-                    } else if (response.status === 403) {
-                        throw new Error(`🚨 權限遭拒 (代碼 403)：您的金鑰未啟用 Generative Language API，或設定了錯誤的防護限制。詳細錯誤：${googleErrorMsg}`);
-                    } else if (response.status === 404) {
-                        throw new Error(`🚨 模型找不到 (代碼 404)：您的專案無權存取 gemini-1.5-flash。詳細錯誤：${googleErrorMsg}`);
-                    } else {
-                        throw new Error(`🚨 未知錯誤 (代碼 ${response.status})：${googleErrorMsg}`);
-                    }
+                    throw new Error(`🚨 生成失敗 (代碼 ${response.status})：${errorText}`);
                 }
 
-                // 成功則回傳內容
                 const data = await response.json();
                 return data.candidates[0].content.parts[0].text;
                 
             } catch (error) {
-                // 網路斷線或 fetch 失敗等狀況
                 if(error.message.includes("Failed to fetch") || error.name === "TypeError") {
-                    throw new Error("🚨 網路連線失敗或被阻擋 (CORS)。請確認您的網路環境或是否裝了阻擋廣告的擴充功能。");
+                    throw new Error("🚨 網路連線失敗或被阻擋。請確認網路環境或是否開啟了阻擋廣告的擴充功能。");
                 }
                 throw error;
             }
