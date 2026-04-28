@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>平日A4桌上立牌視覺藍圖 - AI 穩定版</title>
+    <title>平日A4桌上立牌視覺藍圖 - Cloudflare Worker 安全版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -16,9 +16,8 @@
             min-height: 100vh;
             padding: 2rem;
         }
-        /* 模擬 A4 比例的畫布 (約 210 x 297 mm) */
         .a4-canvas {
-            background-color: #F8F7F3; /* 無印米白底 */
+            background-color: #F8F7F3;
             width: 100%;
             max-width: 794px;
             aspect-ratio: 1 / 1.414;
@@ -59,14 +58,27 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .ai-response-content strong {
-            color: #E06A3B;
-        }
+        .ai-response-content strong { color: #E06A3B; }
         .chip-checkbox input:checked + div {
             background-color: #E06A3B;
             color: white;
             border-color: #E06A3B;
         }
+
+        /* 模型切換 Tab */
+        .model-tab { transition: all 0.2s; }
+        .model-tab.active-claude {
+            background-color: #D97706;
+            color: white;
+            border-color: #D97706;
+        }
+        .model-tab.active-gemini {
+            background-color: #1D4ED8;
+            color: white;
+            border-color: #1D4ED8;
+        }
+        .model-badge-claude { background: #FEF3C7; color: #92400E; }
+        .model-badge-gemini { background: #DBEAFE; color: #1E40AF; }
     </style>
 </head>
 <body>
@@ -149,16 +161,18 @@
 
         </div>
 
-        <!-- 第三區：數位升級 AI 評估入口 -->
+        <!-- 第三區：AI 評估入口 -->
         <div class="mt-4 bg-[#EBE9E1] rounded-2xl p-4 flex flex-col items-center justify-center border border-gray-200 shadow-inner">
             <p class="text-[20px] text-gray-800 mb-3 font-black tracking-wide text-center">讓 AI 助理根據您的狀況<br>進行人體力學初步分析</p>
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 5.0.0 - 智慧尋路版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 6.0.0 - Cloudflare 安全版</p>
         </div>
 
-        <!-- AI 評估 Modal -->
+        <!-- ══════════════════════════════════════ -->
+        <!--  AI 評估 Modal                         -->
+        <!-- ══════════════════════════════════════ -->
         <div id="ai-modal" class="absolute inset-0 bg-[#F8F7F3] z-50 flex flex-col p-8 pointer-events-none">
             
             <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4 mb-4">
@@ -166,6 +180,18 @@
                     <span>✨</span> 筋動人生 AI 簡易身體評估
                 </h2>
                 <button onclick="closeAIModal()" class="text-gray-500 hover:text-red-500 font-bold text-xl">✕ 關閉</button>
+            </div>
+
+            <!-- ── 模型選擇 Tab ── -->
+            <div class="flex gap-2 mb-4">
+                <span class="text-sm font-bold text-gray-500 self-center mr-1">AI 模型：</span>
+                <button id="tab-claude" class="model-tab active-claude px-4 py-1.5 rounded-full border-2 font-bold text-sm" onclick="switchModel('claude')">
+                    🟠 Claude（推薦）
+                </button>
+                <button id="tab-gemini" class="model-tab px-4 py-1.5 rounded-full border-2 border-gray-300 font-bold text-sm text-gray-500" onclick="switchModel('gemini')">
+                    🔵 Gemini
+                </button>
+                <span id="model-badge" class="model-badge-claude text-xs font-bold px-2 py-1 rounded-full self-center">Sonnet 4.5</span>
             </div>
 
             <div class="flex-1 flex flex-col gap-4 overflow-y-auto pb-4 pr-2">
@@ -188,78 +214,33 @@
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">2. 哪裡覺得最不舒服？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="location" value="肩頸" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">肩頸</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="location" value="腰臀" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">腰臀</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="location" value="上背/膏肓" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">上背 / 膏肓</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="location" value="腿部/膝蓋" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">腿部 / 膝蓋</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="location" value="手臂/手腕" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">手臂 / 手腕</div>
-                            </label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">肩頸</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">腰臀</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/膏肓" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">上背 / 膏肓</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">腿部 / 膝蓋</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">手臂 / 手腕</div></label>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">3. 主要是什麼樣的感覺？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="sensation" value="痠" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">痠</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="sensation" value="痛" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">痛</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="sensation" value="麻" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">麻</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="sensation" value="緊繃/卡卡的" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">緊繃 / 卡卡的</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="sensation" value="無力" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">無力</div>
-                            </label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">痠</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痛" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">痛</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="麻" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">麻</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="緊繃/卡卡的" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">緊繃 / 卡卡的</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="無力" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">無力</div></label>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-charcoal font-bold mb-2">4. 為了您的安全，是否有以下狀況？ <span class="text-gray-400 text-sm font-normal">(可複選)</span></label>
                         <div class="flex flex-wrap gap-2">
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="warnings" value="懷孕中" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">懷孕中</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="warnings" value="植入金屬物(鋼釘鋼板)" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">植入金屬物(鋼釘/鋼板)</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="warnings" value="嚴重骨質疏鬆" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">嚴重骨質疏鬆</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="warnings" value="心血管疾病/抗凝血劑" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">心血管疾病 / 抗凝血劑</div>
-                            </label>
-                            <label class="chip-checkbox cursor-pointer">
-                                <input type="checkbox" name="warnings" value="近期骨折/急性發炎" class="hidden">
-                                <div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">近期骨折 / 急性發炎</div>
-                            </label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="懷孕中" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">懷孕中</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="植入金屬物(鋼釘鋼板)" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">植入金屬物(鋼釘/鋼板)</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="嚴重骨質疏鬆" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">嚴重骨質疏鬆</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="心血管疾病/抗凝血劑" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">心血管疾病 / 抗凝血劑</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="近期骨折/急性發炎" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">近期骨折 / 急性發炎</div></label>
                         </div>
                         <p class="text-xs text-gray-400 mt-1">* 若無上述情況，可直接略過</p>
                     </div>
@@ -279,32 +260,54 @@
                     </button>
                 </div>
 
+                <!-- 結果區 -->
                 <div id="result-container" class="hidden bg-[#FFF8F3] p-5 mt-2 rounded-2xl border-2 border-warm-orange shadow-sm relative">
                     <div class="absolute -top-3 left-4 bg-warm-orange text-white px-3 py-0.5 rounded-full text-xs font-bold">分析結果</div>
                     <div id="loading-state" class="text-center py-6 hidden">
                         <div class="loader"></div>
-                        <p id="loading-text" class="mt-3 text-gray-600 font-bold text-sm">正在智慧掃描可用模型清單...</p>
+                        <p id="loading-text" class="mt-3 text-gray-600 font-bold text-sm">正在連線 AI 分析...</p>
                     </div>
                     <div id="ai-response" class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap ai-response-content font-medium"></div>
                 </div>
 
             </div>
-        </div>
+        </div><!-- end ai-modal -->
 
-    </div>
+    </div><!-- end a4-canvas -->
 
     <script>
-        // ==========================================
-        // 🔴 終極重構設定區：智慧尋路自動抓取可用模型
-        // ==========================================
-        
-        // 1. 金鑰已設定（確保這是您最新的有效金鑰）
-        const apiKey = "AIzaSyAcrbnuzRo7FN8XGxDaqQG92bvR-y_v0oQ"; 
-        
-        // 2. 網域已設定
-        const allowedDomain = "a85182877-hue.github.io";
+        // ══════════════════════════════════════════════════════════
+        // ✅ 唯一需要修改的設定：填入您的 Cloudflare Worker URL
+        //    部署 Worker 後，URL 格式如：
+        //    https://jd-ai.your-subdomain.workers.dev
+        // ══════════════════════════════════════════════════════════
+        const WORKER_URL = "https://twilight-sky-7d28.a85182877.workers.dev";
+        // ══════════════════════════════════════════════════════════
 
-        // ==========================================
+        // 目前選擇的模型（預設 claude）
+        let selectedModel = "claude";
+
+        function switchModel(model) {
+            selectedModel = model;
+            const tabClaude = document.getElementById('tab-claude');
+            const tabGemini = document.getElementById('tab-gemini');
+            const badge = document.getElementById('model-badge');
+
+            tabClaude.className = 'model-tab px-4 py-1.5 rounded-full border-2 font-bold text-sm';
+            tabGemini.className = 'model-tab px-4 py-1.5 rounded-full border-2 font-bold text-sm';
+
+            if (model === 'claude') {
+                tabClaude.classList.add('active-claude');
+                tabGemini.classList.add('border-gray-300', 'text-gray-500');
+                badge.className = 'model-badge-claude text-xs font-bold px-2 py-1 rounded-full self-center';
+                badge.textContent = 'Sonnet 4.5';
+            } else {
+                tabGemini.classList.add('active-gemini');
+                tabClaude.classList.add('border-gray-300', 'text-gray-500');
+                badge.className = 'model-badge-gemini text-xs font-bold px-2 py-1 rounded-full self-center';
+                badge.textContent = '1.5 Flash';
+            }
+        }
 
         function openAIModal() {
             const modal = document.getElementById('ai-modal');
@@ -319,57 +322,38 @@
         }
 
         async function analyzeSymptoms() {
-            const safeApiKey = apiKey.trim();
-
-            // --- 防盜刷檢查 ---
-            const currentDomain = window.location.hostname;
-            if (currentDomain !== "" && currentDomain !== "localhost" && currentDomain !== "127.0.0.1" && !currentDomain.includes(allowedDomain)) {
-                alert(`⚠️ 安全警告：此功能僅限於官方網站 [${allowedDomain}] 使用。目前的網域 (${currentDomain}) 遭到阻擋。`);
-                return;
-            }
-            // ---------------------
-
             const occupation = document.getElementById('user-occupation').value;
             if (!occupation) return alert('請先選擇您的職業/生活型態哦！');
 
-            const locationInputs = document.querySelectorAll('input[name="location"]:checked');
-            const locations = Array.from(locationInputs).map(el => el.value).join('、');
+            const locations = Array.from(document.querySelectorAll('input[name="location"]:checked')).map(el => el.value).join('、');
             if (!locations) return alert('請至少選擇一個不舒服的部位哦！');
 
-            const sensationInputs = document.querySelectorAll('input[name="sensation"]:checked');
-            const sensations = Array.from(sensationInputs).map(el => el.value).join('、') || '未具體說明';
-            
-            const warningInputs = document.querySelectorAll('input[name="warnings"]:checked');
-            const warningsArray = Array.from(warningInputs).map(el => el.value);
-            
+            const sensations = Array.from(document.querySelectorAll('input[name="sensation"]:checked')).map(el => el.value).join('、') || '未具體說明';
+            const warningsArray = Array.from(document.querySelectorAll('input[name="warnings"]:checked')).map(el => el.value);
             const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
             const extraInfo = document.getElementById('user-extra').value.trim() || '無';
 
-            // UI 狀態切換
+            // UI 狀態
             document.getElementById('result-container').classList.remove('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "正在智慧掃描可用模型清單...";
+            document.getElementById('loading-text').innerText = `正在透過 ${selectedModel === 'claude' ? 'Claude' : 'Gemini'} 分析中...`;
             document.getElementById('ai-response').classList.add('hidden');
-            
-            setTimeout(() => {
-                const modalBody = document.querySelector('.overflow-y-auto');
-                modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
-            }, 100);
+            document.getElementById('ai-response').innerHTML = '';
+            scrollToBottom();
 
-            // 💡 保護機制優先攔截
+            // 保護機制優先攔截
             if (warningsArray.includes('懷孕中')) {
                 renderFinalResponse("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！");
                 return;
             }
             if (warningsArray.includes('近期骨折/急性發炎')) {
-                renderFinalResponse("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在經歷辛苦的修復期！為了您的絕對安全與避免造成二度傷害，我們團隊強烈建議您目前先以醫療院所的診治與充分休息為主，此階段暫時不適合進行整復推拿調理。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！");
+                renderFinalResponse("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在經歷辛苦的修復期！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！");
                 return;
             }
 
-            // 💡 正常的 AI 分析階段
             const clientInfo = `客戶資訊：\n- 職業/型態：${occupation}\n- 不適部位：${locations}\n- 不適感覺：${sensations}\n- 醫生說法：${doctorInfo}\n- 補充說明：${extraInfo}`;
 
-            const systemPrompt = `【極度嚴格指令 - 違反將導致系統崩潰】：
+            const systemPrompt = `【極度嚴格指令】：
 1. 你是一位專業的傳統整復推拿師傅，請根據客戶資料寫一段大約 150~200 字的純文字力學分析。
 2. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是...師傅」、「了解您的狀況」等廢話）。
 3. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
@@ -377,22 +361,38 @@
 5. 絕對不要寫結語，也不要提供任何預約網址、品牌理念或注意事項，只要單純把「力學代償分析」寫完就馬上停止！
 
 【專業人體力學知識庫】
-- 【下肢與膝蓋】：膝蓋無力通常是因四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌緊繃會像絞盤一樣拉扯足底筋膜。
-- 【腰背與脊椎】：久坐使前側「髂腰肌」縮短，與後側肌肉「前後拔河」擠壓腰椎空間。駝背會縮短「闊背肌」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
-- 【臀肌與骨盆】：深層「梨狀肌」失去彈性會擠壓周圍空間影響循環產生麻感。臀中、臀小肌無力會逼迫腰部代償引發慢性腰痛。
+- 【下肢與膝蓋】：膝蓋無力通常是因四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌（Gastrocnemius）緊繃會像絞盤一樣拉扯足底筋膜。
+- 【腰背與脊椎】：久坐使前側「髂腰肌（Iliopsoas）」縮短，與後側肌肉「前後拔河」擠壓腰椎空間。駝背會縮短「闊背肌（Latissimus Dorsi）」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
+- 【臀肌與骨盆】：深層「梨狀肌（Piriformis）」失去彈性會擠壓周圍空間影響循環產生麻感。臀中肌（Gluteus Medius）、臀小肌（Gluteus Minimus）無力會逼迫腰部代償引發慢性腰痛。
+- 【肩頸】：提肩胛肌（Levator Scapulae）與斜方肌（Trapezius）上束長期處於代償狀態，會像拉緊的鋼纜一樣鎖住頸椎活動空間。
 
 【絕對規範】
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
-- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。`;
+- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎、治療）。
+- 替換詞：調理、放鬆、釋放壓力、平衡、身體順開、喚醒肌肉、找回空間。`;
 
             try {
-                let aiAnalysis = await callGeminiSmartRoute(clientInfo, systemPrompt, safeApiKey);
-                
-                // 💡 系統自動拼接文案
-                let finalResponse = aiAnalysis.trim() + "\n\n";
+                const resp = await fetch(WORKER_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        clientInfo,
+                        systemPrompt,
+                    }),
+                });
+
+                const data = await resp.json();
+
+                if (!resp.ok || data.error) {
+                    throw new Error(data.error || `Worker 回應錯誤 (${resp.status})`);
+                }
+
+                // 拼接後段固定文案
+                let finalResponse = data.result.trim() + "\n\n";
                 finalResponse += "我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。調理後也會依據您的工作型態、日常姿勢給予微保養建議，讓您將這份輕鬆自在能延續下去。\n\n";
                 finalResponse += "**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議並且在與您審慎地溝通後，透過專業的手法來放鬆周圍緊繃的肌肉與筋膜，**幫身體找回原本自在的空間與平衡**。\n\n";
-                
+
                 if (warningsArray.length > 0) {
                     finalResponse += `⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，為了您的安全，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！\n\n`;
                 }
@@ -403,14 +403,14 @@
 
                 renderFinalResponse(finalResponse);
 
-            } catch (error) {
+            } catch (err) {
                 document.getElementById('loading-state').classList.add('hidden');
                 document.getElementById('ai-response').innerHTML = `
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded text-left">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
-                        <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
+                        <p class="text-sm text-gray-700 font-mono break-all">${err.message}</p>
                         <hr class="my-2 border-red-200">
-                        <p class="text-xs text-gray-500 font-bold mt-2">💡 聲師傅：程式已經自動繞過 404 限制去尋找活路，如果還是看到這個畫面，代表這把金鑰可能尚未在 Google AI Studio 中同意服務條款喔！</p>
+                        <p class="text-xs text-gray-500 mt-2">💡 請確認 Cloudflare Worker 是否已部署，且 WORKER_URL 是否已正確填入。</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
@@ -418,87 +418,19 @@
         }
 
         function renderFinalResponse(text) {
-            let formattedResponse = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            formattedResponse = formattedResponse.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
-            
-            document.getElementById('ai-response').innerHTML = formattedResponse;
+            let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/(https:\/\/lin\.ee\/[a-zA-Z0-9]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline font-bold">$1</a>');
+            document.getElementById('ai-response').innerHTML = html;
             document.getElementById('loading-state').classList.add('hidden');
             document.getElementById('ai-response').classList.remove('hidden');
-            
-            setTimeout(() => {
-                const modalBody = document.querySelector('.overflow-y-auto');
-                modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
-            }, 100);
+            scrollToBottom();
         }
 
-        // ==============================================================
-        // ✨ Ver 5.0.0 核心升級：動態詢問 Google 可用模型 (智慧尋路)
-        // ==============================================================
-        async function callGeminiSmartRoute(prompt, systemInstruction, activeKey) {
-            try {
-                // 步驟 1：先向 Google 查詢這把金鑰「真正能用」的模型清單
-                const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${activeKey}`;
-                const listResponse = await fetch(listUrl);
-
-                if (!listResponse.ok) {
-                    const errText = await listResponse.text();
-                    if (listResponse.status === 400 && errText.includes("API_KEY_INVALID")) {
-                        throw new Error("🚨 金鑰無效：請確認您填寫的金鑰是否正確。");
-                    }
-                    throw new Error(`無法取得模型清單 (代碼 ${listResponse.status})：${errText}`);
-                }
-
-                const listData = await listResponse.json();
-
-                // 步驟 2：過濾出支援 "generateContent" 且名稱包含 "gemini" 的模型
-                const availableModels = listData.models.filter(m => 
-                    m.supportedGenerationMethods && 
-                    m.supportedGenerationMethods.includes("generateContent") &&
-                    m.name.includes("gemini")
-                );
-
-                if (!availableModels || availableModels.length === 0) {
-                    throw new Error("🚨 您的帳號目前沒有任何可用的 Gemini 模型權限。請確認是否有在 Google AI Studio 中同意最新服務條款。");
-                }
-
-                // 步驟 3：優先選擇 1.5-flash，若無則直接抓取清單裡的第一個可用模型！
-                let targetModelName = availableModels[0].name; // 預設拿第一個
-                const preferredModel = availableModels.find(m => m.name.includes("1.5-flash"));
-                if (preferredModel) {
-                    targetModelName = preferredModel.name;
-                }
-
-                // 更新畫面提示
-                document.getElementById('loading-text').innerText = `成功尋獲模型 (${targetModelName.replace('models/', '')})，正在分析中...`;
-
-                // 步驟 4：使用找到的正確模型名稱發送分析請求，絕對不會再 404！
-                const generateUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${activeKey}`;
-
-                const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: { parts: [{ text: systemInstruction }] }
-                };
-
-                const response = await fetch(generateUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`🚨 生成失敗 (代碼 ${response.status})：${errorText}`);
-                }
-
-                const data = await response.json();
-                return data.candidates[0].content.parts[0].text;
-                
-            } catch (error) {
-                if(error.message.includes("Failed to fetch") || error.name === "TypeError") {
-                    throw new Error("🚨 網路連線失敗或被阻擋。請確認網路環境或是否開啟了阻擋廣告的擴充功能。");
-                }
-                throw error;
-            }
+        function scrollToBottom() {
+            setTimeout(() => {
+                const modalBody = document.querySelector('.overflow-y-auto');
+                if (modalBody) modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
+            }, 100);
         }
     </script>
 </body>
