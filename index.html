@@ -155,7 +155,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 3.0.0 - 真實金鑰修復版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 3.0.1 - 金鑰自動除錯版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -319,8 +319,11 @@
         }
 
         async function analyzeSymptoms() {
+            // 自動過濾金鑰前後不小心多按到的空白鍵
+            const safeApiKey = apiKey.trim();
+
             // --- 防呆：檢查金鑰是否為空 ---
-            if (!apiKey || apiKey.trim() === "" || apiKey.includes("AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20")) {
+            if (!safeApiKey || safeApiKey === "" || safeApiKey.includes("AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20")) {
                 alert("🚨 系統阻擋：您忘記填入真實的 API 金鑰，或者還在使用上一版的假金鑰！\n\n請打開程式碼第 466 行，把「apiKey」換成您自己申請的真實金鑰！");
                 return;
             }
@@ -389,7 +392,8 @@
 - 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎）。`;
 
             try {
-                let aiAnalysis = await callGeminiWithAutoRoute(clientInfo, systemPrompt);
+                // 傳入處理過空白的 safeApiKey
+                let aiAnalysis = await callGeminiWithAutoRoute(clientInfo, systemPrompt, safeApiKey);
                 
                 // 💡 系統自動拼接文案
                 let finalResponse = aiAnalysis.trim() + "\n\n";
@@ -433,13 +437,12 @@
         }
 
         // 更新為標準的 API 呼叫格式，並加入多模型自動切換機制
-        async function callGeminiWithAutoRoute(prompt, systemInstruction) {
+        async function callGeminiWithAutoRoute(prompt, systemInstruction, activeKey) {
             
             const urlsToTry = [
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${activeKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${activeKey}`
             ];
             
             const payload = {
@@ -462,7 +465,8 @@
                         
                         // 🚨 抓到 400 錯誤，且原因是金鑰無效時，直接跳出迴圈警告
                         if (response.status === 400 && errorText.includes("API_KEY_INVALID")) {
-                            throw new Error("🚨 API 金鑰無效！您填入的金鑰不被 Google 認可。請重新到 Google AI Studio 複製一把新的金鑰。");
+                            const last4Digits = activeKey.slice(-4);
+                            throw new Error(`🚨 API 金鑰無效！您目前輸入的金鑰（尾數為 ${last4Digits}）不被 Google 認可。請確認 GitHub 網頁是否有更新，或者金鑰是否複製完整。`);
                         }
                         
                         lastErrorMsg = `狀態碼 ${response.status}: ${errorText}`;
