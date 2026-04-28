@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -10,343 +11,387 @@
         * { font-family: 'Noto Sans TC', sans-serif; }
         body { background: #F2F0EB; min-height: 100vh; }
 
-        .chip-checkbox input:checked + div {
-            background-color: #E06A3B;
-            color: white;
-            border-color: #E06A3B;
-        }
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 3px solid #E06A3B;
-            width: 22px; height: 22px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .ai-response-content strong { color: #E06A3B; }
+```
+    .chip-checkbox input:checked + div {
+        background-color: #E06A3B;
+        color: white;
+        border-color: #E06A3B;
+    }
+    .loader {
+        border: 3px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 3px solid #E06A3B;
+        width: 22px; height: 22px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .ai-response-content strong { color: #E06A3B; }
 
-        /* 頂部漸層 bar */
-        .top-bar {
-            background: linear-gradient(135deg, #333333 0%, #555 100%);
-        }
+    /* 頂部漸層 bar */
+    .top-bar {
+        background: linear-gradient(135deg, #333333 0%, #555 100%);
+    }
 
-        /* 區塊卡片 */
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+    /* 區塊卡片 */
+    .card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
 
-        /* 送出按鈕 */
-        .btn-submit {
-            background: #333333;
-            color: white;
-            font-weight: 900;
-            font-size: 1.1rem;
-            padding: 1rem;
-            border-radius: 14px;
-            width: 100%;
-            transition: transform 0.15s, background 0.15s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-submit:active { transform: scale(0.97); background: #000; }
+    /* 送出按鈕 */
+    .btn-submit {
+        background: #333333;
+        color: white;
+        font-weight: 900;
+        font-size: 1.1rem;
+        padding: 1rem;
+        border-radius: 14px;
+        width: 100%;
+        transition: transform 0.15s, background 0.15s;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-submit:active { transform: scale(0.97); background: #000; }
 
-        /* 結果區 */
-        .result-card {
-            background: #FFF8F3;
-            border: 2px solid #E06A3B;
-            border-radius: 16px;
-            padding: 1.25rem;
-            position: relative;
-        }
-        .result-badge {
-            position: absolute;
-            top: -12px; left: 16px;
-            background: #E06A3B;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 999px;
-        }
+    /* 結果區 */
+    .result-card {
+        background: #FFF8F3;
+        border: 2px solid #E06A3B;
+        border-radius: 16px;
+        padding: 1.25rem;
+        position: relative;
+    }
+    .result-badge {
+        position: absolute;
+        top: -12px; left: 16px;
+        background: #E06A3B;
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 12px;
+        border-radius: 999px;
+    }
 
-        select, textarea {
-            font-family: 'Noto Sans TC', sans-serif;
-        }
+    select, textarea {
+        font-family: 'Noto Sans TC', sans-serif;
+    }
 
-        /* LINE 連結按鈕 */
-        .line-btn {
-            display: block;
-            background: #06C755;
-            color: white;
-            font-weight: 900;
-            text-align: center;
-            padding: 0.9rem;
-            border-radius: 14px;
-            margin-top: 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-    </style>
+    /* LINE 連結按鈕 */
+    .line-btn {
+        display: block;
+        background: #06C755;
+        color: white;
+        font-weight: 900;
+        text-align: center;
+        padding: 0.9rem;
+        border-radius: 14px;
+        margin-top: 1rem;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+</style>
+```
+
 </head>
 <body>
 
-    <!-- 頂部 Header -->
-    <div class="top-bar px-5 py-4 flex items-center gap-3">
-        <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生"
-             class="h-10 object-contain"
-             onerror="this.style.display='none'">
-        <div>
-            <p class="text-white font-black text-lg leading-tight">筋動人生</p>
-            <p class="text-gray-300 text-xs">AI 身體初步評估</p>
-        </div>
-        <span class="ml-auto text-xs text-green-400 font-bold bg-green-900 px-2 py-1 rounded-full">免費</span>
+```
+<!-- 頂部 Header -->
+<div class="top-bar px-5 py-4 flex items-center gap-3">
+    <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生"
+         class="h-10 object-contain"
+         onerror="this.style.display='none'">
+    <div>
+        <p class="text-white font-black text-lg leading-tight">筋動人生</p>
+        <p class="text-gray-300 text-xs">AI 身體初步評估</p>
+    </div>
+    <span class="ml-auto text-xs text-green-400 font-bold bg-green-900 px-2 py-1 rounded-full">免費</span>
+</div>
+
+<!-- 說明文字 -->
+<div class="px-4 pt-4 pb-2">
+    <p class="text-gray-600 text-sm leading-relaxed text-center">
+        填寫以下資訊，讓 AI 助理<br>為您進行<strong class="text-gray-800">人體力學初步分析</strong>
+    </p>
+</div>
+
+<!-- 表單區 -->
+<div class="px-4 pb-6 flex flex-col gap-4">
+
+    <!-- Q1 職業 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-2 text-sm">
+            1. 您的主要職業 / 生活型態
+            <span class="text-orange-500 font-normal ml-1">必填</span>
+        </label>
+        <select id="user-occupation"
+            class="w-full p-3 border border-gray-200 rounded-xl text-gray-700 bg-gray-50 text-sm focus:ring-2 focus:ring-orange-300 focus:outline-none">
+            <option value="">── 請選擇 ──</option>
+            <option value="內勤/久坐辦公族">內勤 / 久坐辦公族</option>
+            <option value="勞動/重物搬運">勞動 / 重物搬運</option>
+            <option value="司機/長時間駕駛">司機 / 長時間駕駛</option>
+            <option value="服務業/專櫃久站">服務業 / 專櫃久站</option>
+            <option value="家庭主婦/全職帶小孩">家庭主婦 / 夫（做家事 / 抱小孩）</option>
+            <option value="其他">其他</option>
+        </select>
     </div>
 
-    <!-- 說明文字 -->
-    <div class="px-4 pt-4 pb-2">
-        <p class="text-gray-600 text-sm leading-relaxed text-center">
-            填寫以下資訊，讓 AI 助理<br>為您進行<strong class="text-gray-800">人體力學初步分析</strong>
-        </p>
+    <!-- Q2 部位 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-3 text-sm">
+            2. 哪裡覺得最不舒服？
+            <span class="text-gray-400 font-normal ml-1">可複選</span>
+        </label>
+        <div class="flex flex-wrap gap-2">
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">肩頸</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腰臀</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/膏肓" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">手臂 / 手腕</div></label>
+        </div>
     </div>
 
-    <!-- 表單區 -->
-    <div class="px-4 pb-6 flex flex-col gap-4">
+    <!-- Q3 感覺 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-3 text-sm">
+            3. 主要是什麼樣的感覺？
+            <span class="text-gray-400 font-normal ml-1">可複選</span>
+        </label>
+        <div class="flex flex-wrap gap-2">
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痛" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痛</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="麻" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="緊繃/卡卡的" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">緊繃 / 卡卡的</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="無力" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">無力</div></label>
+        </div>
+    </div>
 
-        <!-- Q1 職業 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-2 text-sm">
-                1. 您的主要職業 / 生活型態
-                <span class="text-orange-500 font-normal ml-1">必填</span>
-            </label>
-            <select id="user-occupation"
-                class="w-full p-3 border border-gray-200 rounded-xl text-gray-700 bg-gray-50 text-sm focus:ring-2 focus:ring-orange-300 focus:outline-none">
-                <option value="">── 請選擇 ──</option>
-                <option value="內勤/久坐辦公族">內勤 / 久坐辦公族</option>
-                <option value="勞動/重物搬運">勞動 / 重物搬運</option>
-                <option value="司機/長時間駕駛">司機 / 長時間駕駛</option>
-                <option value="服務業/專櫃久站">服務業 / 專櫃久站</option>
-                <option value="家庭主婦/全職帶小孩">家庭主婦 / 夫（做家事 / 抱小孩）</option>
-                <option value="其他">其他</option>
-            </select>
+    <!-- Q4 安全注意 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-1 text-sm">
+            4. 是否有以下狀況？
+            <span class="text-gray-400 font-normal ml-1">可複選</span>
+        </label>
+        <p class="text-xs text-gray-400 mb-3">* 若無上述情況，可直接略過</p>
+        <div class="flex flex-wrap gap-2">
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="懷孕中" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">懷孕中</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="植入金屬物(鋼釘鋼板)" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">植入金屬物</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="骨質疏鬆" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">骨質疏鬆</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="心血管疾病/抗凝血劑" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">心血管疾病 / 抗凝血劑</div></label>
+            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="近期骨折/急性發炎" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">近期骨折 / 急性發炎</div></label>
+        </div>
+    </div>
+
+    <!-- Q5 醫生 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-2 text-sm">
+            5. 是否有看過醫生？醫生說什麼？
+            <span class="text-gray-400 font-normal ml-1">選填</span>
+        </label>
+        <textarea id="doctor-info" rows="2"
+            class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
+            placeholder="例如：醫生說是椎間盤突出、骨刺..."></textarea>
+    </div>
+
+    <!-- Q6 補充 -->
+    <div class="card">
+        <label class="block font-bold text-gray-800 mb-2 text-sm">
+            6. 其他補充說明
+            <span class="text-gray-400 font-normal ml-1">選填</span>
+        </label>
+        <textarea id="user-extra" rows="2"
+            class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
+            placeholder="例如：早上起床特別痛，或是彎腰時會麻..."></textarea>
+    </div>
+
+    <!-- 送出 -->
+    <button class="btn-submit" onclick="analyzeSymptoms()">
+        ✨ 開始 AI 分析
+    </button>
+
+    <!-- 結果區 -->
+    <div id="result-container" class="hidden">
+
+        <!-- Loading -->
+        <div id="loading-state" class="hidden card flex flex-col items-center py-8 gap-3">
+            <div class="loader"></div>
+            <p id="loading-text" class="text-gray-600 font-bold text-sm">正在分析中...</p>
         </div>
 
-        <!-- Q2 部位 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-3 text-sm">
-                2. 哪裡覺得最不舒服？
-                <span class="text-gray-400 font-normal ml-1">可複選</span>
-            </label>
-            <div class="flex flex-wrap gap-2">
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">肩頸</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腰臀</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/膏肓" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">手臂 / 手腕</div></label>
-            </div>
+        <!-- 結果卡片 -->
+        <div id="result-card" class="result-card hidden">
+            <div class="result-badge">AI 分析結果</div>
+            <div id="ai-response" class="text-gray-800 text-sm leading-relaxed ai-response-content font-medium mt-2 whitespace-pre-wrap"></div>
+            <a href="https://lin.ee/vkwcVbs" target="_blank" class="line-btn">
+                📲 LINE 立即預約
+            </a>
         </div>
-
-        <!-- Q3 感覺 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-3 text-sm">
-                3. 主要是什麼樣的感覺？
-                <span class="text-gray-400 font-normal ml-1">可複選</span>
-            </label>
-            <div class="flex flex-wrap gap-2">
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痛" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痛</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="麻" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="緊繃/卡卡的" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">緊繃 / 卡卡的</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="無力" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">無力</div></label>
-            </div>
-        </div>
-
-        <!-- Q4 安全注意 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-1 text-sm">
-                4. 是否有以下狀況？
-                <span class="text-gray-400 font-normal ml-1">可複選</span>
-            </label>
-            <p class="text-xs text-gray-400 mb-3">* 若無上述情況，可直接略過</p>
-            <div class="flex flex-wrap gap-2">
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="懷孕中" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">懷孕中</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="植入金屬物(鋼釘鋼板)" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">植入金屬物</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="骨質疏鬆" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">骨質疏鬆</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="心血管疾病/抗凝血劑" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">心血管疾病 / 抗凝血劑</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="近期骨折/急性發炎" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">近期骨折 / 急性發炎</div></label>
-            </div>
-        </div>
-
-        <!-- Q5 醫生 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-2 text-sm">
-                5. 是否有看過醫生？醫生說什麼？
-                <span class="text-gray-400 font-normal ml-1">選填</span>
-            </label>
-            <textarea id="doctor-info" rows="2"
-                class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
-                placeholder="例如：醫生說是椎間盤突出、骨刺..."></textarea>
-        </div>
-
-        <!-- Q6 補充 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-2 text-sm">
-                6. 其他補充說明
-                <span class="text-gray-400 font-normal ml-1">選填</span>
-            </label>
-            <textarea id="user-extra" rows="2"
-                class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
-                placeholder="例如：早上起床特別痛，或是彎腰時會麻..."></textarea>
-        </div>
-
-        <!-- 送出 -->
-        <button class="btn-submit" onclick="analyzeSymptoms()">
-            ✨ 開始 AI 分析
-        </button>
-
-        <!-- 結果區 -->
-        <div id="result-container" class="hidden">
-
-            <!-- Loading -->
-            <div id="loading-state" class="hidden card flex flex-col items-center py-8 gap-3">
-                <div class="loader"></div>
-                <p id="loading-text" class="text-gray-600 font-bold text-sm">正在分析中...</p>
-            </div>
-
-            <!-- 結果卡片 -->
-            <div id="result-card" class="result-card hidden">
-                <div class="result-badge">AI 分析結果</div>
-                <div id="ai-response" class="text-gray-800 text-sm leading-relaxed ai-response-content font-medium mt-2 whitespace-pre-wrap"></div>
-                <a href="https://lin.ee/vkwcVbs" target="_blank" class="line-btn">
-                    📲 LINE 立即預約
-                </a>
-            </div>
-
-        </div>
-
-        <!-- 底部版權 -->
-        <p class="text-center text-xs text-gray-400 pb-2">
-            筋動人生 台中南屯｜Ver 6.0.0 Mobile
-        </p>
 
     </div>
 
-    <script>
-        // ✅ 填入您的 Cloudflare Worker URL
-        const WORKER_URL = "https://twilight-sky-7d28.a85182877.workers.dev";
+    <!-- 底部版權 -->
+    <p class="text-center text-xs text-gray-400 pb-2">
+        筋動人生 台中南屯｜Ver 6.0.0 Mobile
+    </p>
 
-        async function analyzeSymptoms() {
-            const occupation = document.getElementById('user-occupation').value;
-            if (!occupation) return alert('請先選擇您的職業 / 生活型態哦！');
+</div>
 
-            const locations = Array.from(document.querySelectorAll('input[name="location"]:checked')).map(el => el.value).join('、');
-            if (!locations) return alert('請至少選擇一個不舒服的部位哦！');
+<script>
+    // ✅ 填入您的 Cloudflare Worker URL
+    const WORKER_URL = "https://twilight-sky-7d28.a85182877.workers.dev";
 
-            const sensations = Array.from(document.querySelectorAll('input[name="sensation"]:checked')).map(el => el.value).join('、') || '未具體說明';
-            const warningsArray = Array.from(document.querySelectorAll('input[name="warnings"]:checked')).map(el => el.value);
-            const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
-            const extraInfo = document.getElementById('user-extra').value.trim() || '無';
+    async function analyzeSymptoms() {
+        const occupation = document.getElementById('user-occupation').value;
+        if (!occupation) return alert('請先選擇您的職業 / 生活型態哦！');
 
-            // UI 狀態
-            const resultContainer = document.getElementById('result-container');
-            const loadingState = document.getElementById('loading-state');
-            const resultCard = document.getElementById('result-card');
-            const aiResponse = document.getElementById('ai-response');
+        const locations = Array.from(document.querySelectorAll('input[name="location"]:checked')).map(el => el.value).join('、');
+        if (!locations) return alert('請至少選擇一個不舒服的部位哦！');
 
-            resultContainer.classList.remove('hidden');
-            loadingState.classList.remove('hidden');
-            resultCard.classList.add('hidden');
-            aiResponse.innerHTML = '';
+        const sensations = Array.from(document.querySelectorAll('input[name="sensation"]:checked')).map(el => el.value).join('、') || '未具體說明';
+        const warningsArray = Array.from(document.querySelectorAll('input[name="warnings"]:checked')).map(el => el.value);
+        const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
+        const extraInfo = document.getElementById('user-extra').value.trim() || '無';
 
-            // 滾動到結果區
-            setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        // UI 狀態
+        const resultContainer = document.getElementById('result-container');
+        const loadingState = document.getElementById('loading-state');
+        const resultCard = document.getElementById('result-card');
+        const aiResponse = document.getElementById('ai-response');
 
-            // 保護機制
-            if (warningsArray.includes('懷孕中')) {
-                loadingState.classList.add('hidden');
-                renderResult("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
-                return;
-            }
-            if (warningsArray.includes('近期骨折/急性發炎')) {
-                loadingState.classList.add('hidden');
-                renderResult("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
-                return;
-            }
+        resultContainer.classList.remove('hidden');
+        loadingState.classList.remove('hidden');
+        resultCard.classList.add('hidden');
+        aiResponse.innerHTML = '';
 
-            const clientInfo = `客戶資訊：\n- 職業/型態：${occupation}\n- 不適部位：${locations}\n- 不適感覺：${sensations}\n- 醫生說法：${doctorInfo}\n- 補充說明：${extraInfo}`;
+        // 滾動到結果區
+        setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 
-            const systemPrompt = `【極度嚴格指令】：
+        // 保護機制
+        if (warningsArray.includes('懷孕中')) {
+            loadingState.classList.add('hidden');
+            renderResult("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
+            return;
+        }
+        if (warningsArray.includes('近期骨折/急性發炎')) {
+            loadingState.classList.add('hidden');
+            renderResult("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
+            return;
+        }
+
+        const clientInfo = `客戶資訊：\n- 職業/型態：${occupation}\n- 不適部位：${locations}\n- 不適感覺：${sensations}\n- 醫生說法：${doctorInfo}\n- 補充說明：${extraInfo}`;
+
+        const systemPrompt = `【極度嚴格指令】：
+```
+
 1. 你是一位專業的傳統整復推拿師傅，請根據客戶資料寫一段大約 150~200 字的純文字力學分析。
-2. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是...師傅」、「了解您的狀況」等廢話）。
-3. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
-4. 絕對不可以寫出任何編號（如「1.」、「2.」）、條列式符號或自訂標題。
-5. 絕對不要寫結語，也不要提供任何預約網址、品牌理念或注意事項，只要單純把「力學代償分析」寫完就馬上停止！
+1. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是…師傅」、「了解您的狀況」等廢話）。
+1. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
+1. 絕對不可以寫出任何編號（如「1.」、「2.」）、條列式符號或自訂標題。
+1. 絕對不要寫結語，也不要提供任何預約網址、品牌理念或注意事項，只要單純把「力學代償分析」寫完就馬上停止！
 
 【專業人體力學知識庫】
+
 - 【下肢與膝蓋】：膝蓋無力通常是因四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌（Gastrocnemius）緊繃會像絞盤一樣拉扯足底筋膜。
 - 【腰背與脊椎】：久坐使前側「髂腰肌（Iliopsoas）」縮短，與後側肌肉「前後拔河」擠壓腰椎空間。駝背會縮短「闊背肌（Latissimus Dorsi）」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
 - 【臀肌與骨盆】：深層「梨狀肌（Piriformis）」失去彈性會擠壓周圍空間影響循環產生麻感。臀中肌（Gluteus Medius）、臀小肌（Gluteus Minimus）無力會逼迫腰部代償引發慢性腰痛。
 - 【肩頸】：提肩胛肌（Levator Scapulae）與斜方肌（Trapezius）上束長期處於代償狀態，會像拉緊的鋼纜一樣鎖住頸椎活動空間。
 
 【絕對規範】
+
 - 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
 - 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎、治療）。
 - 替換詞：調理、放鬆、釋放壓力、平衡、身體順開、喚醒肌肉、找回空間。`;
-
+  
+  ```
+        const payload = JSON.stringify({ model: "gemini", clientInfo, systemPrompt });
+        const maxRetries = 3;
+        let lastError = null;
+  
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
+                // 第2次以後顯示重試提示
+                if (attempt > 1) {
+                    document.getElementById('loading-text').innerText = `AI 伺服器忙碌中，第 ${attempt} 次重試...`;
+                    await new Promise(r => setTimeout(r, 2000 * (attempt - 1)));
+                }
+  
                 const resp = await fetch(WORKER_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ model: "gemini", clientInfo, systemPrompt }),
+                    body: payload,
                 });
-
+  
                 const data = await resp.json();
+  
+                // 503 流量過載 → 重試
+                if (resp.status === 503 || (data.error && data.error.includes('503'))) {
+                    lastError = new Error('Gemini 伺服器暫時忙碌');
+                    continue;
+                }
+  
                 if (!resp.ok || data.error) throw new Error(data.error || `錯誤 ${resp.status}`);
-
+  
                 loadingState.classList.add('hidden');
                 renderResult(data.result.trim(), warningsArray, true);
-
+                return; // 成功，跳出迴圈
+  
             } catch (err) {
-                loadingState.classList.add('hidden');
-                resultCard.classList.remove('hidden');
-                aiResponse.innerHTML = `
-                    <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded-lg">
-                        <p class="text-red-700 font-bold text-sm mb-1">❌ 連線發生錯誤</p>
-                        <p class="text-xs text-gray-600 font-mono break-all">${err.message}</p>
-                    </div>`;
-            }
-        }
-
-        function renderResult(aiText, warningsArray, appendFooter) {
-            const resultCard = document.getElementById('result-card');
-            const aiResponse = document.getElementById('ai-response');
-
-            let content = aiText;
-
-            if (appendFooter) {
-                content += "\n\n我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。\n\n**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議，透過專業的手法**幫身體找回原本自在的空間與平衡**。";
-
-                if (warningsArray.length > 0) {
-                    content += `\n\n⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！`;
+                // 非 503 的錯誤直接跳出不重試
+                if (!err.message.includes('503') && !err.message.includes('忙碌')) {
+                    lastError = err;
+                    break;
                 }
-
-                content += "\n\n以上為簡易評估，詳細情況建議現場諮詢師傅，我們放心您也安心😊";
+                lastError = err;
             }
-
-            // 渲染 markdown bold
-            const html = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-            aiResponse.innerHTML = html;
-            resultCard.classList.remove('hidden');
-            setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         }
+  
+        // 三次都失敗才顯示錯誤
+        loadingState.classList.add('hidden');
+        resultCard.classList.remove('hidden');
+        aiResponse.innerHTML = `
+            <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded-lg">
+                <p class="text-red-700 font-bold text-sm mb-1">❌ 連線發生錯誤</p>
+                <p class="text-xs text-gray-600 break-all">${
+                    lastError?.message?.includes('忙碌') || lastError?.message?.includes('503')
+                    ? 'AI 伺服器目前流量過高，請稍等片刻後再試一次 🙏'
+                    : lastError?.message
+                }</p>
+            </div>`;
+    }
+  
+    function renderResult(aiText, warningsArray, appendFooter) {
+        const resultCard = document.getElementById('result-card');
+        const aiResponse = document.getElementById('ai-response');
+  
+        let content = aiText;
+  
+        if (appendFooter) {
+            content += "\n\n我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。\n\n**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議，透過專業的手法**幫身體找回原本自在的空間與平衡**。";
+  
+            if (warningsArray.length > 0) {
+                content += `\n\n⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！`;
+            }
+  
+            content += "\n\n以上為簡易評估，詳細情況建議現場諮詢師傅，我們放心您也安心😊";
+        }
+  
+        // 渲染 markdown bold
+        const html = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+        aiResponse.innerHTML = html;
+        resultCard.classList.remove('hidden');
+        setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+  ```
+  
     </script>
+
 </body>
 </html>
