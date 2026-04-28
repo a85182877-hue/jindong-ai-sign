@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>筋動AI分析 - AI 穩定版</title>
+    <title>平日A4桌上立牌視覺藍圖 - AI 穩定版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -155,7 +155,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 2.0.1 - 穩定模型切換版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 2.0.2 - 模型自動切換版</p>
         </div>
 
         <!-- AI 評估 Modal -->
@@ -298,8 +298,8 @@
         // 🔴 終極防護網設定區
         // ==========================================
         
-        // 1. 金鑰已設定
-        const apiKey = "AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20";
+        // 1. 填寫您的真實金鑰
+        const apiKey = "AIzaSyA3OMVkUgFz8yCmeKpQzTQBzi3_KvXGU20"; // 👈 請確認這裡是您最新的金鑰
         
         // 2. 網域已設定
         const allowedDomain = "a85182877-hue.github.io";
@@ -407,7 +407,7 @@
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <p class="text-red-700 font-bold mb-2">❌ 連線發生錯誤：</p>
                         <p class="text-sm text-gray-700 font-mono break-all">${error.message}</p>
-                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 提示：請確保畫面顯示為 Ver 2.0.1，若非此版本請按 Ctrl+F5 重新整理。</p>
+                        <p class="text-sm text-gray-500 mt-3 border-t border-red-200 pt-2">💡 提示：請確保畫面顯示為 Ver 2.0.2，若非此版本請按 Ctrl+F5 重新整理。</p>
                     </div>
                 `;
                 document.getElementById('ai-response').classList.remove('hidden');
@@ -428,24 +428,30 @@
             }, 100);
         }
 
-        // 更新為標準的 API 呼叫格式，並加入重試機制
+        // 更新為標準的 API 呼叫格式，並加入多模型自動切換機制
         async function callGeminiWithAutoRoute(prompt, systemInstruction) {
             
             if (!apiKey || apiKey.includes("真實金鑰")) {
                 throw new Error("請先在程式碼最上方填入您真實的 API Key！");
             }
 
-            // ✅ 這裡已經確實更改為穩定的 1.5-flash 模型
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // ✅ 建立可用模型庫清單（自動降級/切換）
+            // 如果第一個 404 找不到，程式會自動無縫測試下一個版本，確保連線成功！
+            const urlsToTry = [
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`
+            ];
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
                 systemInstruction: { parts: [{ text: systemInstruction }] }
             };
 
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            
-            for (let attempt = 0; attempt <= 5; attempt++) {
+            let lastErrorMsg = "";
+
+            for (const url of urlsToTry) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
@@ -455,20 +461,23 @@
 
                     if (!response.ok) {
                         const errorData = await response.text();
-                        throw new Error(`API 請求失敗 (${response.status}): ${errorData}`);
+                        lastErrorMsg = `API 請求失敗 (${response.status}): ${errorData}`;
+                        console.warn(`嘗試模型路徑失敗，正在自動切換下一個備用模型...`);
+                        continue; // 這個模型失敗，立刻跳下一個繼續試
                     }
 
+                    // 只要有一個成功，就直接回傳結果並結束
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                     
                 } catch (error) {
-                    if (attempt < 5) {
-                        await new Promise(resolve => setTimeout(resolve, delays[attempt]));
-                    } else {
-                        throw error;
-                    }
+                    lastErrorMsg = error.message;
+                    console.warn(`連線錯誤：${error.message}，正在切換下一個...`);
                 }
             }
+            
+            // 如果名單裡的模型全部都失敗，才會丟出錯誤給畫面
+            throw new Error(`所有可用模型皆無法連線。最後錯誤：${lastErrorMsg}`);
         }
     </script>
 </body>
