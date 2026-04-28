@@ -12,10 +12,20 @@
         body { background: #F2F0EB; min-height: 100vh; }
 
 ```
+    .chip-checkbox {
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+    }
     .chip-checkbox input:checked + div {
         background-color: #E06A3B;
         color: white;
         border-color: #E06A3B;
+    }
+    .chip-checkbox div {
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        touch-action: manipulation;
     }
     .loader {
         border: 3px solid #f3f3f3;
