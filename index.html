@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI簡易身體評估</title>
+    <title>平日A4桌上立牌視覺藍圖 - Cloudflare Worker 安全版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -167,7 +167,7 @@
             <button onclick="openAIModal()" class="bg-warm-orange hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-lg">
                 <span>✨ 免費 AI 身體初步評估</span>
             </button>
-            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 6.0.0 AI安全版</p>
+            <p class="text-[12px] text-white mt-2 font-bold bg-green-600 px-3 py-1 rounded-full shadow-sm">Ver 6.0.0 - Cloudflare 安全版</p>
         </div>
 
         <!-- ══════════════════════════════════════ -->
@@ -182,17 +182,7 @@
                 <button onclick="closeAIModal()" class="text-gray-500 hover:text-red-500 font-bold text-xl">✕ 關閉</button>
             </div>
 
-            <!-- ── 模型選擇 Tab ── -->
-            <div class="flex gap-2 mb-4">
-                <span class="text-sm font-bold text-gray-500 self-center mr-1">AI 模型：</span>
-                <button id="tab-claude" class="model-tab active-claude px-4 py-1.5 rounded-full border-2 font-bold text-sm" onclick="switchModel('claude')">
-                    🟠 Claude（推薦）
-                </button>
-                <button id="tab-gemini" class="model-tab px-4 py-1.5 rounded-full border-2 border-gray-300 font-bold text-sm text-gray-500" onclick="switchModel('gemini')">
-                    🔵 Gemini
-                </button>
-                <span id="model-badge" class="model-badge-claude text-xs font-bold px-2 py-1 rounded-full self-center">Sonnet 4.5</span>
-            </div>
+
 
             <div class="flex-1 flex flex-col gap-4 overflow-y-auto pb-4 pr-2">
                 
@@ -238,7 +228,7 @@
                         <div class="flex flex-wrap gap-2">
                             <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="懷孕中" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">懷孕中</div></label>
                             <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="植入金屬物(鋼釘鋼板)" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">植入金屬物(鋼釘/鋼板)</div></label>
-                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="骨質疏鬆" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">嚴重骨質疏鬆</div></label>
+                            <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="骨質疏鬆" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">骨質疏鬆</div></label>
                             <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="心血管疾病/抗凝血劑" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">心血管疾病 / 抗凝血劑</div></label>
                             <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="warnings" value="近期骨折/急性發炎" class="hidden"><div class="px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 transition-colors">近期骨折 / 急性發炎</div></label>
                         </div>
