@@ -225,18 +225,25 @@
             return result;
         }
 
-        function renderPage(index) {
+        function renderPage(index, warns = []) {
             const isLast = index === pages.length - 1;
             currentPage = index;
-
             document.getElementById('ai-response').innerHTML = pages[index].replace(/\n/g, '<br>');
-
             if (pages.length > 1) {
                 document.getElementById('page-indicator').style.display = 'block';
                 document.getElementById('page-indicator').textContent = `第 ${index + 1} 頁 / 共 ${pages.length} 頁`;
             }
 
+            // 特殊狀況提醒
+            const specialWarnings = ['植入金屬物(鋼釘鋼板)', '骨質疏鬆', '心血管疾病/抗凝血劑'];
+            const triggered = warns.filter(w => specialWarnings.includes(w));
+            const warningHtml = triggered.length > 0 ? `
+                <div style="margin-top: 16px; padding: 12px 14px; background: #FFF8F3; border-left: 3px solid #E06A3B; border-radius: 8px; font-size: 14px; color: #444; line-height: 1.8;">
+                    ⚠️ 留意到您有「${triggered.join('、')}」的狀況，來現場調理前記得主動告知師傅，讓我們為您安排更合適的手法與力道，調理過程才能更安心！
+                </div>` : '';
+
             document.getElementById('footer-text').innerHTML = isLast ? `
+                ${warningHtml}
                 <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0d9cc; font-size: 14px; line-height: 1.9; color: #444;">
                     <p style="margin: 0 0 14px;">我們與外面常見的「單純推壓」不同，<strong>【筋動人生】</strong>秉持『<span style="color:#E06A3B;">先放鬆肌肉再做平衡舒緩</span>』的理念，透過專業手法來深層放鬆讓調理過程安全有感。</p>
                     <p style="margin: 0 0 14px;">『<span style="color:#E06A3B;">我們專注在肌肉與筋膜的放鬆調理</span>』，透過專業的手法幫您的身體找回原本自在的空間與平衡。</p>
@@ -248,13 +255,13 @@
             nav.style.display = pages.length > 1 ? 'block' : 'none';
             document.getElementById('btn-next').style.display = !isLast ? 'block' : 'none';
             document.getElementById('btn-prev').style.display = index > 0 ? 'block' : 'none';
-
             setTimeout(() => document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         }
 
+        let currentWarns = [];
         function changePage(dir) {
             const next = currentPage + dir;
-            if (next >= 0 && next < pages.length) renderPage(next);
+            if (next >= 0 && next < pages.length) renderPage(next, currentWarns);
         }
 
         async function analyzeSymptoms() {
@@ -318,10 +325,11 @@
                     if (!resp.ok || data.error) { lastError = new Error(data.error || `錯誤 ${resp.status}`); break; }
 
                     pages = splitIntoPages(data.result.trim());
+                    currentWarns = warningsArray;
                     currentPage = 0;
                     loadingState.classList.add('hidden');
                     resultCard.classList.remove('hidden');
-                    renderPage(0);
+                    renderPage(0, warningsArray);
                     success = true;
                     break;
                 } catch (err) { lastError = err; break; }
