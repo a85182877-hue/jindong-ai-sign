@@ -281,18 +281,22 @@
             // 保護機制
             if (warningsArray.includes('懷孕中')) {
                 loadingState.classList.add('hidden');
-                pages = ["留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！"];
-                currentPage = 0;
                 resultCard.classList.remove('hidden');
-                renderPage(0);
+                document.getElementById('ai-response').innerHTML = "留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。<br><br>等未來順產後，隨時歡迎您再來找我們好好保養身體喔！";
+                document.getElementById('footer-text').innerHTML = '';
+                document.getElementById('page-nav').style.display = 'none';
+                document.getElementById('page-indicator').style.display = 'none';
+                setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                 return;
             }
             if (warningsArray.includes('近期骨折/急性發炎')) {
                 loadingState.classList.add('hidden');
-                pages = ["留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！"];
-                currentPage = 0;
                 resultCard.classList.remove('hidden');
-                renderPage(0);
+                document.getElementById('ai-response').innerHTML = "留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。<br><br>等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！";
+                document.getElementById('footer-text').innerHTML = '';
+                document.getElementById('page-nav').style.display = 'none';
+                document.getElementById('page-indicator').style.display = 'none';
+                setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                 return;
             }
 
