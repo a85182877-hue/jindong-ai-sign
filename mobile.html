@@ -10,108 +10,33 @@
         * { font-family: 'Noto Sans TC', sans-serif; }
         body { background: #F2F0EB; min-height: 100vh; }
 
-        .chip-checkbox {
-            -webkit-tap-highlight-color: transparent;
-            cursor: pointer;
-        }
-        .chip-checkbox input:checked + div {
-            background-color: #E06A3B;
-            color: white;
-            border-color: #E06A3B;
-        }
-        .chip-checkbox div {
-            -webkit-user-select: none;
-            user-select: none;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 3px solid #E06A3B;
-            width: 22px; height: 22px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .ai-response-content strong { color: #E06A3B; }
+        .chip-checkbox { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+        .chip-checkbox input:checked + div { background-color: #E06A3B; color: white; border-color: #E06A3B; }
+        .chip-checkbox div { -webkit-user-select: none; user-select: none; cursor: pointer; touch-action: manipulation; }
 
-        /* 頂部漸層 bar */
-        .top-bar {
-            background: linear-gradient(135deg, #333333 0%, #555 100%);
-        }
+        .loader { border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #E06A3B; width: 22px; height: 22px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* 區塊卡片 */
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-
-        /* 送出按鈕 */
-        .btn-submit {
-            background: #333333;
-            color: white;
-            font-weight: 900;
-            font-size: 1.1rem;
-            padding: 1rem;
-            border-radius: 14px;
-            width: 100%;
-            transition: transform 0.15s, background 0.15s;
-            border: none;
-            cursor: pointer;
-        }
+        .top-bar { background: linear-gradient(135deg, #333333 0%, #555 100%); }
+        .card { background: white; border-radius: 16px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .btn-submit { background: #333333; color: white; font-weight: 900; font-size: 1.1rem; padding: 1rem; border-radius: 14px; width: 100%; transition: transform 0.15s, background 0.15s; border: none; cursor: pointer; }
         .btn-submit:active { transform: scale(0.97); background: #000; }
 
-        /* 結果區 */
-        .result-card {
-            background: #FFF8F3;
-            border: 2px solid #E06A3B;
-            border-radius: 16px;
-            padding: 1.25rem;
-            position: relative;
-        }
-        .result-badge {
-            position: absolute;
-            top: -12px; left: 16px;
-            background: #E06A3B;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 999px;
-        }
+        .result-card { background: #FFF8F3; border: 2px solid #E06A3B; border-radius: 16px; padding: 1.25rem; position: relative; }
+        .result-badge { position: absolute; top: -12px; left: 16px; background: #E06A3B; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 12px; border-radius: 999px; }
 
-        select, textarea {
-            font-family: 'Noto Sans TC', sans-serif;
-        }
+        .page-btn-next { display: block; background: #E06A3B; color: white; font-weight: 900; text-align: center; padding: 12px; border-radius: 14px; margin-top: 16px; border: none; cursor: pointer; font-size: 15px; width: 100%; }
+        .page-btn-prev { display: block; background: white; color: #E06A3B; font-weight: 700; text-align: center; padding: 10px; border-radius: 14px; margin-top: 8px; border: 2px solid #E06A3B; cursor: pointer; font-size: 14px; width: 100%; }
+        .line-btn { display: block; background: #06C755; color: white; font-weight: 900; text-align: center; padding: 0.9rem; border-radius: 14px; margin-top: 1rem; text-decoration: none; font-size: 1rem; }
 
-        /* LINE 連結按鈕 */
-        .line-btn {
-            display: block;
-            background: #06C755;
-            color: white;
-            font-weight: 900;
-            text-align: center;
-            padding: 0.9rem;
-            border-radius: 14px;
-            margin-top: 1rem;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+        select, textarea { font-family: 'Noto Sans TC', sans-serif; }
     </style>
 </head>
 <body>
 
     <!-- 頂部 Header -->
     <div class="top-bar px-5 py-4 flex items-center gap-3">
-        <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生"
-             class="h-10 object-contain"
-             onerror="this.style.display='none'">
+        <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生" class="h-10 object-contain" onerror="this.style.display='none'">
         <div>
             <p class="text-white font-black text-lg leading-tight">筋動人生</p>
             <p class="text-gray-300 text-xs">AI 身體初步評估</p>
@@ -135,8 +60,7 @@
                 1. 您的主要職業 / 生活型態
                 <span class="text-orange-500 font-normal ml-1">必填</span>
             </label>
-            <select id="user-occupation"
-                class="w-full p-3 border border-gray-200 rounded-xl text-gray-700 bg-gray-50 text-sm focus:ring-2 focus:ring-orange-300 focus:outline-none">
+            <select id="user-occupation" class="w-full p-3 border border-gray-200 rounded-xl text-gray-700 bg-gray-50 text-sm focus:ring-2 focus:ring-orange-300 focus:outline-none">
                 <option value="">── 請選擇 ──</option>
                 <option value="內勤/久坐辦公族">內勤 / 久坐辦公族</option>
                 <option value="勞動/重物搬運">勞動 / 重物搬運</option>
@@ -157,8 +81,8 @@
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">肩頸</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腰臀</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/膏肓" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">手臂 / 手腕</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
             </div>
         </div>
 
@@ -169,11 +93,9 @@
                 <span class="text-gray-400 font-normal ml-1">可複選</span>
             </label>
             <div class="flex flex-wrap gap-2">
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痛" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痛</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠痛/緊繃" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠痛 / 緊繃</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="麻" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="緊繃/卡卡的" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">緊繃 / 卡卡的</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="無力" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">無力</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="沉重感" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">沉重感</div></label>
             </div>
         </div>
 
@@ -193,37 +115,11 @@
             </div>
         </div>
 
-        <!-- Q5 醫生 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-2 text-sm">
-                5. 是否有看過醫生？醫生說什麼？
-                <span class="text-gray-400 font-normal ml-1">選填</span>
-            </label>
-            <textarea id="doctor-info" rows="2"
-                class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
-                placeholder="例如：醫生說是椎間盤突出、骨刺..."></textarea>
-        </div>
-
-        <!-- Q6 補充 -->
-        <div class="card">
-            <label class="block font-bold text-gray-800 mb-2 text-sm">
-                6. 其他補充說明
-                <span class="text-gray-400 font-normal ml-1">選填</span>
-            </label>
-            <textarea id="user-extra" rows="2"
-                class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-300 focus:outline-none"
-                placeholder="例如：早上起床特別痛，或是彎腰時會麻..."></textarea>
-        </div>
-
         <!-- 送出 -->
-        <button class="btn-submit" onclick="analyzeSymptoms()">
-            ✨ 開始 AI 分析
-        </button>
+        <button class="btn-submit" onclick="analyzeSymptoms()">✨ 開始 AI 分析</button>
 
-        <!-- 結果區 -->
+        <!-- Loading -->
         <div id="result-container" class="hidden">
-
-            <!-- Loading -->
             <div id="loading-state" class="hidden card flex flex-col items-center py-8 gap-3">
                 <div class="loader"></div>
                 <p id="loading-text" class="text-gray-600 font-bold text-sm">正在分析中...</p>
@@ -232,24 +128,134 @@
             <!-- 結果卡片 -->
             <div id="result-card" class="result-card hidden">
                 <div class="result-badge">AI 分析結果</div>
-                <div id="ai-response" class="text-gray-800 text-sm leading-relaxed ai-response-content font-medium mt-2 whitespace-pre-wrap"></div>
-                <a href="https://lin.ee/vkwcVbs" target="_blank" class="line-btn">
-                    📲 LINE 立即預約
-                </a>
-            </div>
 
+                <!-- 頁碼 -->
+                <div id="page-indicator" style="display:none; font-size: 12px; color: #aaa; text-align: right; margin-bottom: 8px; margin-top: 4px;"></div>
+
+                <!-- 分析內容 -->
+                <div id="ai-response" style="font-size: 15px; line-height: 1.9; color: #333; word-break: break-word; overflow-wrap: break-word; margin-top: 8px;"></div>
+
+                <!-- 固定文案（最後一頁） -->
+                <div id="footer-text"></div>
+
+                <!-- 分頁按鈕 -->
+                <div id="page-nav" style="display:none;">
+                    <button id="btn-next" class="page-btn-next" onclick="changePage(1)" style="display:none;">繼續看下一頁 →</button>
+                    <button id="btn-prev" class="page-btn-prev" onclick="changePage(-1)" style="display:none;">← 上一頁</button>
+                </div>
+            </div>
         </div>
 
         <!-- 底部版權 -->
-        <p class="text-center text-xs text-gray-400 pb-2">
-            筋動人生 台中南屯｜Ver 6.0.0 Mobile
-        </p>
+        <p class="text-center text-xs text-gray-400 pb-2">筋動人生 台中南屯｜Ver 7.0.0 Mobile</p>
 
     </div>
 
     <script>
-        // ✅ 填入您的 Cloudflare Worker URL
         const WORKER_URL = "https://twilight-sky-7d28.a85182877.workers.dev";
+
+        const SYSTEM_PROMPT = `【筋動人生 AI 評估｜Prompt v5.1】
+
+你是一位深耕二十年的整復推拿師傅，用最生活化的方式讓客人理解自己的身體狀況。
+
+【輸出結構 - 必須完整輸出兩個部分，缺一不可】
+
+第一部分：每個不適部位各自一個段落（有幾個部位就寫幾個）
+▍【部位名稱】
+狀況：白話一句話描述這個部位目前的狀態（不提肌肉名稱）
+可能影響到的肌肉群：
+・肌肉中文（英文）— 一句話說明這條肌肉負責什麼
+・肌肉中文（英文）— 一句話說明這條肌肉負責什麼
+（最多3條，部位之間空一行）
+
+第二部分：感覺分析【強制必須輸出，絕對不可省略】
+📌 您目前的感覺分析
+・感覺名稱：一句話說明這個感覺代表什麼物理狀態（不超過25字）
+（客人選幾個感覺就寫幾條，每個感覺都要獨立一行，一條都不能漏）
+
+⚠️ 感覺分析是必要輸出，即使部位很多也必須在最後完整輸出，絕對不可省略或縮短
+
+【規則】
+- 狀況欄禁止出現肌肉名稱
+- 感覺分析每條不超過25字
+- 不寫開場白、結語、行動建議、醫療建議
+- 輸出必須完整，不可中途截斷
+
+【各部位肌肉對照庫】
+- 肩頸：提肩胛肌（Levator Scapulae）、斜方肌上束（Upper Trapezius）、胸鎖乳突肌（Sternocleidomastoid）
+- 腰臀：髂腰肌（Iliopsoas）、臀大肌（Gluteus Maximus）、臀中肌（Gluteus Medius）
+- 上背膏肓：菱形肌（Rhomboids）、闊背肌（Latissimus Dorsi）、豎脊肌（Erector Spinae）
+- 腿膝：股四頭肌（Quadriceps）、腓腸肌（Gastrocnemius）、髂脛束（IT Band）
+- 手臂手腕：屈指淺肌（Flexor Digitorum Superficialis）、伸腕肌群（Wrist Extensors）、旋前圓肌（Pronator Teres）
+
+【生活化比喻庫】
+- 肩頸：像背包背帶越綁越緊，頭的重量直接壓在硬掉的肌肉上
+- 腰臀：前側像縮水吊帶往前拉，後側像硬皮失去彈性，中間只能硬撐
+- 上背膏肓：像翅膀收合的機關卡住，橡皮筋過度拉伸後失去彈回能力
+- 腿膝：緩衝彈簧彈性不足，每步衝擊直接往下壓
+- 手臂手腕：像過緊的琴弦，彈性空間消失，輕微動作都會拉扯
+
+【感覺比喻庫】
+- 痠痛/緊繃：肌肉失去彈性後，過度繃緊時身體就會開始發出痠痛與緊繃的訊號
+- 麻：肌肉空間被擠壓，循環的通道被卡住時身體就會開始發出麻的訊號
+- 沉重感：肌肉長期代償累積疲勞，身體就會發出越來越沉重、越來越重的訊號
+
+【絕對禁止字眼】
+神經、壓迫神經、骨頭、脊椎、椎間盤、矯正、復位、治療、治癒、發炎、診斷、無力、建議您`;
+
+        let pages = [];
+        let currentPage = 0;
+
+        function splitIntoPages(text) {
+            const rawParts = text.split(/(?=▍)/);
+            const bodyParts = [];
+            let sensePart = '';
+            rawParts.forEach(part => {
+                const trimmed = part.trim();
+                if (!trimmed) return;
+                if (trimmed.includes('📌')) { sensePart = trimmed; }
+                else { bodyParts.push(trimmed); }
+            });
+            if (bodyParts.length <= 2) return [text];
+            const result = [];
+            for (let i = 0; i < bodyParts.length; i += 2) {
+                result.push(bodyParts.slice(i, i + 2).join('\n\n'));
+            }
+            if (sensePart) result[result.length - 1] += '\n\n' + sensePart;
+            return result;
+        }
+
+        function renderPage(index) {
+            const isLast = index === pages.length - 1;
+            currentPage = index;
+
+            document.getElementById('ai-response').innerHTML = pages[index].replace(/\n/g, '<br>');
+
+            if (pages.length > 1) {
+                document.getElementById('page-indicator').style.display = 'block';
+                document.getElementById('page-indicator').textContent = `第 ${index + 1} 頁 / 共 ${pages.length} 頁`;
+            }
+
+            document.getElementById('footer-text').innerHTML = isLast ? `
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0d9cc; font-size: 14px; line-height: 1.9; color: #444;">
+                    <p style="margin: 0 0 14px;">我們與外面常見的「單純推壓」不同，<strong>【筋動人生】</strong>秉持『<span style="color:#E06A3B;">先放鬆肌肉再做平衡舒緩</span>』的理念，透過專業手法來深層放鬆讓調理過程安全有感。</p>
+                    <p style="margin: 0 0 14px;">『<span style="color:#E06A3B;">我們專注在肌肉與筋膜的放鬆調理</span>』，透過專業的手法幫您的身體找回原本自在的空間與平衡。</p>
+                    <p style="margin: 0 0 16px; color: #444;">以上為 AI 的簡易評估，詳細情況建議現場諮詢師傅，您安心我們放心 😊</p>
+                    <a href="https://lin.ee/vkwcVbs" target="_blank" class="line-btn">📲 LINE 立即預約</a>
+                </div>` : '';
+
+            const nav = document.getElementById('page-nav');
+            nav.style.display = pages.length > 1 ? 'block' : 'none';
+            document.getElementById('btn-next').style.display = !isLast ? 'block' : 'none';
+            document.getElementById('btn-prev').style.display = index > 0 ? 'block' : 'none';
+
+            setTimeout(() => document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        function changePage(dir) {
+            const next = currentPage + dir;
+            if (next >= 0 && next < pages.length) renderPage(next);
+        }
 
         async function analyzeSymptoms() {
             const occupation = document.getElementById('user-occupation').value;
@@ -258,58 +264,40 @@
             const locations = Array.from(document.querySelectorAll('input[name="location"]:checked')).map(el => el.value).join('、');
             if (!locations) return alert('請至少選擇一個不舒服的部位哦！');
 
-            const sensations = Array.from(document.querySelectorAll('input[name="sensation"]:checked')).map(el => el.value).join('、') || '未具體說明';
-            const warningsArray = Array.from(document.querySelectorAll('input[name="warnings"]:checked')).map(el => el.value);
-            const doctorInfo = document.getElementById('doctor-info').value.trim() || '未說明';
-            const extraInfo = document.getElementById('user-extra').value.trim() || '無';
+            const sensations = Array.from(document.querySelectorAll('input[name="sensation"]:checked')).map(el => el.value).join('、');
+            if (!sensations) return alert('請至少選擇一個感覺哦！');
 
-            // UI 狀態
+            const warningsArray = Array.from(document.querySelectorAll('input[name="warnings"]:checked')).map(el => el.value);
+
             const resultContainer = document.getElementById('result-container');
             const loadingState = document.getElementById('loading-state');
             const resultCard = document.getElementById('result-card');
-            const aiResponse = document.getElementById('ai-response');
 
             resultContainer.classList.remove('hidden');
             loadingState.classList.remove('hidden');
             resultCard.classList.add('hidden');
-            aiResponse.innerHTML = '';
-
-            // 滾動到結果區
             setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 
             // 保護機制
             if (warningsArray.includes('懷孕中')) {
                 loadingState.classList.add('hidden');
-                renderResult("留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
+                pages = ["留意到您目前正在懷孕中，真的是辛苦了！為了保護孕媽咪與寶寶的絕對安全，我們團隊目前暫不提供孕期調理服務。建議您可以尋求專業的孕婦按摩或諮詢您的婦產科醫師。\n\n等未來順產後，隨時歡迎您再來找我們好好保養身體喔！"];
+                currentPage = 0;
+                resultCard.classList.remove('hidden');
+                renderPage(0);
                 return;
             }
             if (warningsArray.includes('近期骨折/急性發炎')) {
                 loadingState.classList.add('hidden');
-                renderResult("留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！", warningsArray, false);
+                pages = ["留意到您目前正處於近期骨折或急性發炎的狀態，身體正在努力修復中！為了您的絕對安全，我們強烈建議您目前先以醫療院所的診治與充分休息為主。\n\n等未來身體完全康復後，隨時歡迎您再來找我們好好保養身體喔！"];
+                currentPage = 0;
+                resultCard.classList.remove('hidden');
+                renderPage(0);
                 return;
             }
 
-            const clientInfo = `客戶資訊：\n- 職業/型態：${occupation}\n- 不適部位：${locations}\n- 不適感覺：${sensations}\n- 醫生說法：${doctorInfo}\n- 補充說明：${extraInfo}`;
-
-            const systemPrompt = `【極度嚴格指令】：
-1. 你是一位專業的傳統整復推拿師傅，請根據客戶資料寫一段大約 150~200 字的純文字力學分析。
-2. 絕對不可以寫任何開場白或自我介紹（嚴禁說「你好」、「我是...師傅」、「了解您的狀況」等廢話）。
-3. 必須直接以「從**人體力學**的角度來看，」這句話作為文章的第一個字，直接開始分析。
-4. 絕對不可以寫出任何編號（如「1.」、「2.」）、條列式符號或自訂標題。
-5. 絕對不要寫結語，也不要提供任何預約網址、品牌理念或注意事項，只要單純把「力學代償分析」寫完就馬上停止！
-
-【專業人體力學知識庫】
-- 【下肢與膝蓋】：膝蓋無力通常是因四大肌肉鋼索失衡產生的「前後夾擊」或「左右拉扯」導致空間壓縮。小腿腓腸肌（Gastrocnemius）緊繃會像絞盤一樣拉扯足底筋膜。
-- 【腰背與脊椎】：久坐使前側「髂腰肌（Iliopsoas）」縮短，與後側肌肉「前後拔河」擠壓腰椎空間。駝背會縮短「闊背肌（Latissimus Dorsi）」這條牽引繩索，向上引發膏肓痛、向下鎖死下背活動。
-- 【臀肌與骨盆】：深層「梨狀肌（Piriformis）」失去彈性會擠壓周圍空間影響循環產生麻感。臀中肌（Gluteus Medius）、臀小肌（Gluteus Minimus）無力會逼迫腰部代償引發慢性腰痛。
-- 【肩頸】：提肩胛肌（Levator Scapulae）與斜方肌（Trapezius）上束長期處於代償狀態，會像拉緊的鋼纜一樣鎖住頸椎活動空間。
-
-【絕對規範】
-- 絕對禁止使用「神經」、「壓迫神經」字眼！請改用「擠壓周圍空間，影響循環產生痠麻感」替代。
-- 嚴禁診斷或治療字眼（禁止使用：矯正、復位、治癒、發炎、治療）。
-- 替換詞：調理、放鬆、釋放壓力、平衡、身體順開、喚醒肌肉、找回空間。`;
-
-            const payload = JSON.stringify({ model: "claude", clientInfo, systemPrompt });
+            const clientInfo = `職業：${occupation}\n不適部位：${locations}\n主要感覺：${sensations}`;
+            const payload = JSON.stringify({ model: "claude", clientInfo, systemPrompt: SYSTEM_PROMPT, max_tokens: 2000 });
             const maxRetries = 3;
             let lastError = null;
             let success = false;
@@ -320,94 +308,42 @@
                         document.getElementById('loading-text').innerText = `AI 伺服器忙碌中，第 ${attempt} 次重試...`;
                         await new Promise(r => setTimeout(r, 2500 * (attempt - 1)));
                     }
-
-                    const resp = await fetch(WORKER_URL, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: payload,
-                    });
-
+                    const resp = await fetch(WORKER_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: payload });
                     const data = await resp.json();
+                    if (resp.status === 503 || (data.error && data.error.includes('503'))) { lastError = new Error('503'); continue; }
+                    if (!resp.ok || data.error) { lastError = new Error(data.error || `錯誤 ${resp.status}`); break; }
 
-                    // 503 流量過載 → 重試
-                    if (resp.status === 503 || (data.error && data.error.includes('503'))) {
-                        lastError = new Error('503');
-                        continue;
-                    }
-
-                    if (!resp.ok || data.error) {
-                        lastError = new Error(data.error || `錯誤 ${resp.status}`);
-                        break; // 非 503 錯誤不重試
-                    }
-
+                    pages = splitIntoPages(data.result.trim());
+                    currentPage = 0;
                     loadingState.classList.add('hidden');
-                    renderResult(data.result.trim(), warningsArray, true);
+                    resultCard.classList.remove('hidden');
+                    renderPage(0);
                     success = true;
                     break;
-
-                } catch (err) {
-                    lastError = err;
-                    break;
-                }
+                } catch (err) { lastError = err; break; }
             }
 
             if (!success) {
                 loadingState.classList.add('hidden');
                 resultCard.classList.remove('hidden');
-                aiResponse.innerHTML = `
+                document.getElementById('ai-response').innerHTML = `
                     <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded-lg">
                         <p class="text-red-700 font-bold text-sm mb-1">❌ 連線發生錯誤</p>
-                        <p class="text-xs text-gray-600 break-all">${
-                            lastError?.message?.includes('503')
-                            ? 'AI 伺服器目前流量過高，請稍等片刻後再試一次 🙏'
-                            : lastError?.message
-                        }</p>
+                        <p class="text-xs text-gray-600 break-all">${lastError?.message?.includes('503') ? 'AI 伺服器目前流量過高，請稍等片刻後再試一次 🙏' : lastError?.message}</p>
                     </div>`;
             }
         }
 
-        function renderResult(aiText, warningsArray, appendFooter) {
-            const resultCard = document.getElementById('result-card');
-            const aiResponse = document.getElementById('ai-response');
-
-            let content = aiText;
-
-            if (appendFooter) {
-                content += "\n\n我們與外面常見的「硬喬、硬拉」不同，【筋動人生】秉持『**先放鬆肌肉再達成平衡舒緩**』的理念，透過專業手法來深層放鬆讓調理過程安全有感。\n\n**我們不針對疾病做治療**，但只要是『**非結構性破壞**』的問題，我們將配合醫生的建議，透過專業的手法**幫身體找回原本自在的空間與平衡**。";
-
-                if (warningsArray.length > 0) {
-                    content += `\n\n⚠️ 溫馨提醒：留意到您有「${warningsArray.join('、')}」的特殊狀況，來現場調理時請務必再次告知師傅，我們會為您調整專屬的手法與力道哦！`;
-                }
-
-                content += "\n\n以上為簡易評估，詳細情況建議現場諮詢師傅，我們放心您也安心😊";
-            }
-
-            // 渲染 markdown bold
-            const html = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-            aiResponse.innerHTML = html;
-            resultCard.classList.remove('hidden');
-            setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-        }
-        // ✅ iOS Safari chip-checkbox 點擊修復
+        // iOS Safari 點擊修復
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.chip-checkbox').forEach(function(label) {
                 label.addEventListener('click', function(e) {
                     const checkbox = label.querySelector('input[type="checkbox"]');
                     if (checkbox && e.target !== checkbox) {
                         checkbox.checked = !checkbox.checked;
-                        // 手動觸發樣式更新
                         const div = label.querySelector('div');
-                        if (checkbox.checked) {
-                            div.style.backgroundColor = '#E06A3B';
-                            div.style.color = 'white';
-                            div.style.borderColor = '#E06A3B';
-                        } else {
-                            div.style.backgroundColor = '';
-                            div.style.color = '';
-                            div.style.borderColor = '';
-                        }
+                        if (checkbox.checked) { div.style.backgroundColor = '#E06A3B'; div.style.color = 'white'; div.style.borderColor = '#E06A3B'; }
+                        else { div.style.backgroundColor = ''; div.style.color = ''; div.style.borderColor = ''; }
                         e.preventDefault();
                     }
                 });
