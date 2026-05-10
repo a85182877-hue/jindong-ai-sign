@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>筋動人生 ✨ AI 身體初步評估</title>
+    <title>筋動人生 AI 助理｜人體力學初步分析</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -38,9 +38,6 @@
     <div class="top-bar px-5 py-4 flex items-center gap-3">
         <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生" class="h-10 object-contain" onerror="this.style.display='none'">
         <div>
-            <p class="text-white font-black text-lg leading-tight">筋動人生</p>
-            <p class="text-gray-300 text-xs">AI 身體初步評估</p>
-        </div>
         <span class="ml-auto text-xs text-green-400 font-bold bg-green-900 px-2 py-1 rounded-full">免費</span>
     </div>
 
@@ -80,7 +77,7 @@
             <div class="flex flex-wrap gap-2">
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">肩頸</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腰臀</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/膏肓" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/肩胛骨內側" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">手臂 / 手腕</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
             </div>
@@ -94,7 +91,7 @@
             </label>
             <div class="flex flex-wrap gap-2">
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠痛/緊繃" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠痛 / 緊繃</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="麻" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="卡卡的" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="沉重感" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">沉重感</div></label>
             </div>
         </div>
@@ -117,7 +114,12 @@
 
         <!-- 送出 -->
         <button class="btn-submit" onclick="analyzeSymptoms()">✨ 開始 AI 分析</button>
-
+       
+        <!-- 免責聲明 -->
+        <p style="font-size: 11px; color: #aaa; line-height: 1.6; text-align: center; padding: 0 8px;">
+            本系統僅提供日常體態與肌肉放鬆之視覺參考，非屬醫療器材，亦不具備疾病診斷或治療目的。若有身體疼痛不適，請務必尋求專業醫師協助。
+        </p>
+       
         <!-- Loading -->
         <div id="result-container" class="hidden">
             <div id="loading-state" class="hidden card flex flex-col items-center py-8 gap-3">
