@@ -38,6 +38,8 @@
     <div class="top-bar px-5 py-4 flex items-center gap-3">
         <img src="筋動人生 (廣告看板 (直式)).png" alt="筋動人生" class="h-10 object-contain" onerror="this.style.display='none'">
         <div>
+            <p class="text-white font-black text-lg leading-tight">筋動人生</p>
+        </div>
         <span class="ml-auto text-xs text-green-400 font-bold bg-green-900 px-2 py-1 rounded-full">免費</span>
     </div>
 
@@ -77,7 +79,7 @@
             <div class="flex flex-wrap gap-2">
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="肩頸" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">肩頸</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腰臀" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腰臀</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/肩胛骨內側" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 膏肓</div></label>
+                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="上背/肩胛骨內側" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">上背 / 肩胛骨內側</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="手臂/手腕" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">手臂 / 手腕</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="location" value="腿部/膝蓋" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">腿部 / 膝蓋</div></label>
             </div>
@@ -91,7 +93,6 @@
             </label>
             <div class="flex flex-wrap gap-2">
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="痠痛/緊繃" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">痠痛 / 緊繃</div></label>
-                <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="卡卡的" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">麻</div></label>
                 <label class="chip-checkbox cursor-pointer"><input type="checkbox" name="sensation" value="沉重感" class="hidden"><div class="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600">沉重感</div></label>
             </div>
         </div>
@@ -114,12 +115,12 @@
 
         <!-- 送出 -->
         <button class="btn-submit" onclick="analyzeSymptoms()">✨ 開始 AI 分析</button>
-       
+
         <!-- 免責聲明 -->
         <p style="font-size: 11px; color: #aaa; line-height: 1.6; text-align: center; padding: 0 8px;">
             本系統僅提供日常體態與肌肉放鬆之視覺參考，非屬醫療器材，亦不具備疾病診斷或治療目的。若有身體疼痛不適，請務必尋求專業醫師協助。
         </p>
-       
+
         <!-- Loading -->
         <div id="result-container" class="hidden">
             <div id="loading-state" class="hidden card flex flex-col items-center py-8 gap-3">
@@ -186,20 +187,19 @@
 【各部位肌肉對照庫】
 - 肩頸：提肩胛肌（Levator Scapulae）、斜方肌上束（Upper Trapezius）、胸鎖乳突肌（Sternocleidomastoid）
 - 腰臀：髂腰肌（Iliopsoas）、臀大肌（Gluteus Maximus）、臀中肌（Gluteus Medius）
-- 上背膏肓：菱形肌（Rhomboids）、闊背肌（Latissimus Dorsi）、豎脊肌（Erector Spinae）
+- 上背/肩胛骨內側：菱形肌（Rhomboids）、闊背肌（Latissimus Dorsi）、豎脊肌（Erector Spinae）
 - 腿膝：股四頭肌（Quadriceps）、腓腸肌（Gastrocnemius）、髂脛束（IT Band）
 - 手臂手腕：屈指淺肌（Flexor Digitorum Superficialis）、伸腕肌群（Wrist Extensors）、旋前圓肌（Pronator Teres）
 
 【生活化比喻庫】
 - 肩頸：像背包背帶越綁越緊，頭的重量直接壓在硬掉的肌肉上
 - 腰臀：前側像縮水吊帶往前拉，後側像硬皮失去彈性，中間只能硬撐
-- 上背膏肓：像翅膀收合的機關卡住，橡皮筋過度拉伸後失去彈回能力
+- 上背/肩胛骨內側：像翅膀收合的機關卡住，橡皮筋過度拉伸後失去彈回能力
 - 腿膝：緩衝彈簧彈性不足，每步衝擊直接往下壓
 - 手臂手腕：像過緊的琴弦，彈性空間消失，輕微動作都會拉扯
 
 【感覺比喻庫】
 - 痠痛/緊繃：肌肉失去彈性後，過度繃緊時身體就會開始發出痠痛與緊繃的訊號
-- 麻：肌肉空間被擠壓，循環的通道被卡住時身體就會開始發出麻的訊號
 - 沉重感：肌肉長期代償累積疲勞，身體就會發出越來越沉重、越來越重的訊號
 
 【絕對禁止字眼】
